@@ -17,4 +17,19 @@ c1 = (cos(ra)*sin(roll))
 c2 = (cos(ra)*cos(roll))
 c3 = -(sin(de))
 M = np.array([[a1,a2,a3],[b1,b2,b3],[c1,c2,c3]])
-print(M)
+print("*"*80)
+print(f"Matrix M:\n {M}")
+
+#Check if matrix is orthogonal
+M_inverse = np.round(np.linalg.inv(M),decimals=5)
+M_transpose = np.round(np.matrix.transpose(M),decimals=5)
+orthogonal_check = []
+for row in range(3):
+    for column in range(3):
+        element_check = M_inverse[row,column] == M_transpose[row,column]
+        orthogonal_check.append(element_check)
+
+if all(orthogonal_check):
+    print("Matrix is orthogonal...\nMoving on to next calculation")
+else:
+    print("WARNING: Matrix is not orthogonal")
