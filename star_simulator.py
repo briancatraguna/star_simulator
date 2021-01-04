@@ -6,7 +6,7 @@ ra = radians(float(input("Enter the right ascension angle in degrees:\n")))
 de = radians(float(input("Enter the declination angle in degrees:\n")))
 roll = radians(float(input("Enter the roll angle in degrees:\n")))
 
-#Conversion of celestial coordinate system to star sensor coordinate system
+#STEP 1: CONVERSION OF CELESTIAL COORDINATE SYSTEM TO STAR SENSOR COORDINATE SYSTEM
 a1 = (sin(ra)*cos(roll)) - (cos(ra)*sin(de)*sin(roll))
 a2 = -(sin(ra)*sin(roll)) - (cos(ra)*sin(de)*cos(roll))
 a3 = -(cos(ra)*cos(de))
@@ -33,3 +33,4 @@ if all(orthogonal_check):
     print("Matrix is orthogonal...\nMoving on to next calculation")
 else:
     print("WARNING: Matrix is not orthogonal")
+
