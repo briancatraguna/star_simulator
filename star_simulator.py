@@ -39,13 +39,6 @@ if all(orthogonal_check):
 else:
     print("WARNING: Matrix M is not orthogonal")
 
-#Converting to star sensor coordinate system
-x_i = (cos(ra)*sin(de))
-y_i = (sin(ra)*cos(de))
-z_i = (sin(de))
-direction_vector_celestial = np.array([[x_i],[y_i],[z_i]])
-print(f"Direction vector of stars in celestial coordinate system:\n{direction_vector_celestial}")
-
 #Search for image-able stars
 print("Reading in CSV file...\n")
 col_list = ["Star ID","RA","DE","Magnitude"]
@@ -58,3 +51,22 @@ star_in_ra = star_catalogue[star_within_ra_range]
 star_in_de = star_catalogue[star_within_de_range]
 star_in_de = star_in_de[['Star ID']].copy()
 stars_within_FOV = pd.merge(star_in_ra,star_in_de,on="Star ID")
+
+#Converting to star sensor coordinate system
+ra_i = list(stars_within_FOV['RA'])
+de_i = list(stars_within_FOV['DE'])
+print(ra_i,de_i,sep='\n\n')
+
+star_sensor_coordinates = []
+for i in range(len(ra_i)):
+    x_dir_vector = (cos(ra_i[i]*sin(de_i[i])))
+    y_dir_vector = (sin(ra_i[i]*cos(de_i[i])))
+    z_dir_vector = (sin(de_i[i]))
+    dir_vector_matrix = np.array([[x_dir_vector],[y_dir_vector],[z_dir_vector]])
+    star_sensor_coord = M_transpose.dot(dir_vector_matrix)
+    print(star_sensor_coord,'\n')
+# stars_within_FOV['x direction vector'] = (cos(ra_i)*sin(de_i))
+# stars_within_FOV['y direction vector'] = (sin(ra_i)*cos(de_i))
+# stars_within_FOV['z direction vector'] = (sin(de_i))
+
+# print(stars_within_FOV)
