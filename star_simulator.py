@@ -64,9 +64,4 @@ for i in range(len(ra_i)):
     z_dir_vector = (sin(de_i[i]))
     dir_vector_matrix = np.array([[x_dir_vector],[y_dir_vector],[z_dir_vector]])
     star_sensor_coord = M_transpose.dot(dir_vector_matrix)
-    print(star_sensor_coord,'\n')
-# stars_within_FOV['x direction vector'] = (cos(ra_i)*sin(de_i))
-# stars_within_FOV['y direction vector'] = (sin(ra_i)*cos(de_i))
-# stars_within_FOV['z direction vector'] = (sin(de_i))
-
-# print(stars_within_FOV)
+    star_sensor_coordinates.append(star_sensor_coord)
