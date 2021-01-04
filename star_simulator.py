@@ -43,7 +43,6 @@ else:
 print("Reading in CSV file...\n")
 col_list = ["Star ID","RA","DE","Magnitude"]
 star_catalogue = pd.read_csv('Below_6.0_SAO.csv',usecols=col_list)
-
 R = sqrt((x_fov**2)+(y_fov**2))/2
 star_within_ra_range = ((ra - (R/cos(de))) <= star_catalogue['RA']) & (star_catalogue['RA'] <= (ra + (R/cos(de))))
 star_within_de_range = ((de - R) <= star_catalogue['DE']) & (star_catalogue['DE'] <= (de + R))
@@ -55,13 +54,22 @@ stars_within_FOV = pd.merge(star_in_ra,star_in_de,on="Star ID")
 #Converting to star sensor coordinate system
 ra_i = list(stars_within_FOV['RA'])
 de_i = list(stars_within_FOV['DE'])
-print(ra_i,de_i,sep='\n\n')
-
 star_sensor_coordinates = []
 for i in range(len(ra_i)):
-    x_dir_vector = (cos(ra_i[i]*sin(de_i[i])))
+    x_dir_vector = (cos(ra_i[i]*cos(de_i[i])))
     y_dir_vector = (sin(ra_i[i]*cos(de_i[i])))
     z_dir_vector = (sin(de_i[i]))
     dir_vector_matrix = np.array([[x_dir_vector],[y_dir_vector],[z_dir_vector]])
     star_sensor_coord = M_transpose.dot(dir_vector_matrix)
     star_sensor_coordinates.append(star_sensor_coord)
+    print(star_sensor_coord)
+
+#Converting to image coordinate system
+f = 0.016
+image_coordinates = []
+for i in range(len(star_sensor_coordinates)):
+    x_image = (star_sensor_coordinates[i][0]/star_sensor_coordinates[i][2])*f
+    y_image = (star_sensor_coordinates[i][1]/star_sensor_coordinates[i][2])*f
+    coord = [x_image,y_image]
+    image_coordinates.append(coord)
+    print(coord)
