@@ -1,6 +1,7 @@
-from math import radians,sin,cos,sqrt
+from math import radians,degrees,sin,cos,sqrt
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 #Right ascension, declination and roll input prompt from user
 ra = radians(float(input("Enter the right ascension angle in degrees:\n")))
@@ -65,11 +66,16 @@ for i in range(len(ra_i)):
     print(star_sensor_coord)
 
 #Converting to image coordinate system
-f = 0.016
-image_coordinates = []
+x_coordinates = []
+y_coordinates = []
 for i in range(len(star_sensor_coordinates)):
-    x_image = (star_sensor_coordinates[i][0]/star_sensor_coordinates[i][2])*f
-    y_image = (star_sensor_coordinates[i][1]/star_sensor_coordinates[i][2])*f
-    coord = [x_image,y_image]
-    image_coordinates.append(coord)
-    print(coord)
+    x_coordinates.append(star_sensor_coordinates[i][0]/star_sensor_coordinates[i][2])
+    y_coordinates.append(star_sensor_coordinates[i][1]/star_sensor_coordinates[i][2])
+
+#Construction of star image
+width = round(degrees(x_fov) * 100) #Arbitrary number just to scale
+height = round(degrees(y_fov) * 100) #Arbitrary number just to scale
+background = np.zeros((width,height))
+
+
+for star in image_coordinates:
