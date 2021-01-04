@@ -1,10 +1,15 @@
-from math import radians,sin,cos
+from math import radians,sin,cos,sqrt
 import numpy as np
+import pandas as pd
 
 #Right ascension, declination and roll input prompt from user
 ra = radians(float(input("Enter the right ascension angle in degrees:\n")))
 de = radians(float(input("Enter the declination angle in degrees:\n")))
 roll = radians(float(input("Enter the roll angle in degrees:\n")))
+
+#FOV prompt from user
+x_fov = float(input("Enter the X - axis FOV in degrees:\n"))
+y_fov = float(input("Enter the Y - axis FOV in degrees:\n"))
 
 #STEP 1: CONVERSION OF CELESTIAL COORDINATE SYSTEM TO STAR SENSOR COORDINATE SYSTEM
 a1 = (sin(ra)*cos(roll)) - (cos(ra)*sin(de)*sin(roll))
@@ -30,7 +35,17 @@ for row in range(3):
         orthogonal_check.append(element_check)
 
 if all(orthogonal_check):
-    print("Matrix is orthogonal...\nMoving on to next calculation")
+    print("Matrix M is orthogonal...\nMoving on to next calculation\n")
 else:
-    print("WARNING: Matrix is not orthogonal")
+    print("WARNING: Matrix M is not orthogonal")
 
+#Search for image-able stars
+print("Reading in CSV file...\n")
+col_list = ["Star ID","RA","DE","Magnitude"]
+star_catalogue = pd.read_csv('Below_6.0_SAO.csv',usecols=col_list)
+print(star_catalogue)
+
+R = radians(sqrt((x_fov**2)+(y_fov**2))/2)
+star_within_ra_range = ((ra - (R/cos(de))) <= star_catalogue['RA']) & (star_catalogue['RA'] <= (ra + (R/cos(de))))
+star_within_de_range = ((de - R) <= star_catalogue['DE']) & (star_catalogue['DE'] <= (de + R))
+print(star_within_ra_range,star_within_de_range)

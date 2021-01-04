@@ -8,6 +8,5 @@ tidy_catalogue = excel_catalogue.rename(columns = {'Unnamed: 0': 'Star ID', 'Unn
 less_and_equal_6 = tidy_catalogue['Magnitude']<=6.0
 filtered_catalogue = tidy_catalogue[less_and_equal_6]
 
-
-#Saving to Excel File
+#Saving to CSV File
 filtered_catalogue.to_csv("Below_6.0_SAO.csv")
