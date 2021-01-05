@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 def dir_vector_to_star_sensor(ra,de,M_transpose):
-    """[summary]
+    """[Converts direction vector to star sensor coordinates]
 
     Args:
         ra ([int]): [right ascension of the object vector]
@@ -16,6 +16,23 @@ def dir_vector_to_star_sensor(ra,de,M_transpose):
     z_dir_vector = (sin(de))
     dir_vector_matrix = np.array([[x_dir_vector],[y_dir_vector],[z_dir_vector]])
     return M_transpose.dot(dir_vector_matrix)
+
+def find_edges(arr):
+    """[Finds the respective edges]
+
+    Args:
+        arr ([arr]): [array of arrays containing x and y of the edges]
+
+    Returns:
+        [tuple]: [tuple of coordinates including top left, top right, bottom left, bottom right respectively]
+    """
+    x = arr[:][0]
+    y = arr[:][1]
+    top_left = (min(x),max(y))
+    top_right = (max(x),max(y))
+    bottom_left = (min(x),min(y))
+    bottom_right = (max(x),min(y))
+    return top_left,top_right,bottom_left,bottom_right
 
 #Right ascension, declination and roll input prompt from user
 ra = radians(float(input("Enter the right ascension angle in degrees:\n")))
@@ -85,16 +102,25 @@ for i in range(len(ra_i)):
     coordinates = dir_vector_to_star_sensor(ra_i[i],de_i[i],M_transpose=M_transpose)
     star_sensor_coordinates.append(coordinates)
 
-#Prompt Gaussian distribution parameters
-mv_magnitude = list(stars_within_FOV['Magnitude'])
-sigma = round(float(input("Input sigma:\n")))
-K_1 = round(float(input("Input K1:\n")))
-K_2 = round(float(input("Input K2:\n")))
-K_3 = round(float(input("Input K3:\n")))
+#Coordinates in image
+print("*"*60,"\nImage edges coordinates:\n")
+image_edges = []
+for coord in edges_coordinates:
+    x = coord[0]/coord[2]
+    y = coord[1]/coord[2]
+    image_edges.append([x,y])
+    print([x,y])
 
-H = []
-for magnitude in mv_magnitude:
-    magnitude = float(magnitude)
-    H.append(K_1**((-K_2*magnitude)+K_3))
+print("*"*60,"\nStar coordinates:\n")
+star_loc = []
+for coord in star_sensor_coordinates:
+    x = coord[0]/coord[2]
+    y = coord[1]/coord[2]
+    star_loc.append([x,y])
+    print([x,y])
 
-f_intensity = []
+print("*"*60)
+
+edges = find_edges(image_edges)
+for edge in edges:
+    print(edges)
