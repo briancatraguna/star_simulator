@@ -52,6 +52,21 @@ star_in_de = star_catalogue[star_within_de_range]
 star_in_de = star_in_de[['Star ID']].copy()
 stars_within_FOV = pd.merge(star_in_ra,star_in_de,on="Star ID")
 
+#Find A,B,C,D
+A = ((ra - (R/cos(de))),(de - R)) #Bottom left
+B = ((ra + (R/cos(de))),(de - R)) #Bottom right
+C = ((ra + (R/cos(de))),(de + R)) #Top right
+D = ((ra - (R/cos(de))),(de + R)) #Top left
+edges = [A,B,C,D]
+edges_coordinates = []
+for ra,de in edges:
+    x_dir_vector = (cos(ra*cos(de)))
+    y_dir_vector = (sin(ra*cos(de)))
+    z_dir_vector = (sin(de))
+    dir_vector_matrix = np.array([[x_dir_vector],[y_dir_vector],[z_dir_vector]])
+    edge_coord = M_transpose.dot(dir_vector_matrix)
+    edges_coordinates.append(edge_coord)
+
 #Converting to star sensor coordinate system
 ra_i = list(stars_within_FOV['RA'])
 de_i = list(stars_within_FOV['DE'])
@@ -63,19 +78,9 @@ for i in range(len(ra_i)):
     dir_vector_matrix = np.array([[x_dir_vector],[y_dir_vector],[z_dir_vector]])
     star_sensor_coord = M_transpose.dot(dir_vector_matrix)
     star_sensor_coordinates.append(star_sensor_coord)
-    print(star_sensor_coord)
 
-#Converting to image coordinate system
-x_coordinates = []
-y_coordinates = []
-for i in range(len(star_sensor_coordinates)):
-    x_coordinates.append(star_sensor_coordinates[i][0]/star_sensor_coordinates[i][2])
-    y_coordinates.append(star_sensor_coordinates[i][1]/star_sensor_coordinates[i][2])
+#Prompt Gaussian distribution parameters
+sigma = round(float(input("Input sigma:\n")))
+K_1 = round(float(input("Input K1:\n")))
+K_2 = round(float(input("Input K2:\n")))
 
-#Construction of star image
-width = round(degrees(x_fov) * 100) #Arbitrary number just to scale
-height = round(degrees(y_fov) * 100) #Arbitrary number just to scale
-background = np.zeros((width,height))
-
-
-for star in image_coordinates:
