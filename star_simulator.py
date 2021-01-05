@@ -3,6 +3,20 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+def dir_vector_to_star_sensor(ra,de,M_transpose):
+    """[summary]
+
+    Args:
+        ra ([int]): [right ascension of the object vector]
+        de ([int]): [desclination of the object vector]
+        M_transpose ([numpy array]): [rotation matrix from direction vector to star sensor transposed]
+    """    
+    x_dir_vector = (cos(ra)*cos(de))
+    y_dir_vector = (sin(ra)*cos(de))
+    z_dir_vector = (sin(de))
+    dir_vector_matrix = np.array([[x_dir_vector],[y_dir_vector],[z_dir_vector]])
+    return M_transpose.dot(dir_vector_matrix)
+
 #Right ascension, declination and roll input prompt from user
 ra = radians(float(input("Enter the right ascension angle in degrees:\n")))
 de = radians(float(input("Enter the declination angle in degrees:\n")))
@@ -60,27 +74,27 @@ D = ((ra - (R/cos(de))),(de + R)) #Top left
 edges = [A,B,C,D]
 edges_coordinates = []
 for ra,de in edges:
-    x_dir_vector = (cos(ra*cos(de)))
-    y_dir_vector = (sin(ra*cos(de)))
-    z_dir_vector = (sin(de))
-    dir_vector_matrix = np.array([[x_dir_vector],[y_dir_vector],[z_dir_vector]])
-    edge_coord = M_transpose.dot(dir_vector_matrix)
-    edges_coordinates.append(edge_coord)
+    coordinates = dir_vector_to_star_sensor(ra,de,M_transpose=M_transpose)
+    edges_coordinates.append(coordinates)
 
 #Converting to star sensor coordinate system
 ra_i = list(stars_within_FOV['RA'])
 de_i = list(stars_within_FOV['DE'])
 star_sensor_coordinates = []
 for i in range(len(ra_i)):
-    x_dir_vector = (cos(ra_i[i]*cos(de_i[i])))
-    y_dir_vector = (sin(ra_i[i]*cos(de_i[i])))
-    z_dir_vector = (sin(de_i[i]))
-    dir_vector_matrix = np.array([[x_dir_vector],[y_dir_vector],[z_dir_vector]])
-    star_sensor_coord = M_transpose.dot(dir_vector_matrix)
-    star_sensor_coordinates.append(star_sensor_coord)
+    coordinates = dir_vector_to_star_sensor(ra_i[i],de_i[i],M_transpose=M_transpose)
+    star_sensor_coordinates.append(coordinates)
 
 #Prompt Gaussian distribution parameters
+mv_magnitude = list(stars_within_FOV['Magnitude'])
 sigma = round(float(input("Input sigma:\n")))
 K_1 = round(float(input("Input K1:\n")))
 K_2 = round(float(input("Input K2:\n")))
+K_3 = round(float(input("Input K3:\n")))
 
+H = []
+for magnitude in mv_magnitude:
+    magnitude = float(magnitude)
+    H.append(K_1**((-K_2*magnitude)+K_3))
+
+f_intensity = []
