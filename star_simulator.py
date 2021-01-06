@@ -1,4 +1,4 @@
-from math import radians,degrees,sin,cos,sqrt
+from math import radians,degrees,sin,cos,tan,sqrt
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -42,6 +42,12 @@ roll = radians(float(input("Enter the roll angle in degrees:\n")))
 #FOV prompt from user
 x_fov = radians(float(input("Enter the X - axis FOV in degrees:\n")))
 y_fov = radians(float(input("Enter the Y - axis FOV in degrees:\n")))
+
+l = degrees(x_fov)*120 #Arbitrary
+w = degrees(y_fov)*120 #Arbitrary
+
+#Focal length prompt from user
+f = float(input("Enter focal length:\n"))
 
 #STEP 1: CONVERSION OF CELESTIAL COORDINATE SYSTEM TO STAR SENSOR COORDINATE SYSTEM
 a1 = (sin(ra)*cos(roll)) - (cos(ra)*sin(de)*sin(roll))
@@ -116,11 +122,22 @@ star_loc = []
 for coord in star_sensor_coordinates:
     x = coord[0]/coord[2]
     y = coord[1]/coord[2]
-    star_loc.append([x,y])
-    print([x,y])
+    star_loc.append((x,y))
+    print((x,y))
 
-print("*"*60)
+xtot = 2*tan(x_fov/2)*f #meters
+ytot = 2*tan(y_fov/2)*f #meters
+print("xtot:",xtot)
+print("ytot:",ytot)
+xpixel = l/xtot #pixel/meters
+ypixel = w/ytot #pixel/meters
+print("Width:",w)
+print("Length:",l)
 
-edges = find_edges(image_edges)
-for edge in edges:
-    print(edges)
+star_in_pixel_coordinates = []
+for x,y in star_loc:
+    x1pixel = round(xpixel*float(x)) #pixel
+    y1pixel = round(ypixel*float(y)) #pixel
+    star_in_pixel_coordinates.append((x1pixel,y1pixel))
+
+print(star_in_pixel_coordinates)
