@@ -1,7 +1,8 @@
-from math import radians,degrees,sin,cos,tan,sqrt,atan
+from math import radians,degrees,sin,cos,tan,sqrt,atan,pi
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import cv2
 
 def dir_vector_to_star_sensor(ra,de,M_transpose):
     """[Converts direction vector to star sensor coordinates]
@@ -34,13 +35,27 @@ def find_edges(arr):
     bottom_right = (max(x),min(y))
     return top_left,top_right,bottom_left,bottom_right
 
+def displayImg(img,cmap=None):
+    """[Displays image]
+
+    Args:
+        img ([numpy array]): [the pixel values in the form of numpy array]
+        cmap ([string], optional): [can be 'gray']. Defaults to None.
+    """
+    img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+    fig = plt.figure(figsize=(12,10))
+    ax = fig.add_subplot(111)
+    ax.imshow(img,cmap)
+    plt.show()
+
+
 #Right ascension, declination and roll input prompt from user
 ra = radians(float(input("Enter the right ascension angle in degrees:\n")))
 de = radians(float(input("Enter the declination angle in degrees:\n")))
 roll = radians(float(input("Enter the roll angle in degrees:\n")))
 
 #Angle/pixel
-myu = 1.12*(10**-6)
+myu = 0.25*(10**-6)
 
 #Focal length prompt from user
 f = 0.003044898
@@ -50,8 +65,10 @@ l = 3280
 w = 2464
 
 #Star sensor FOV
-FOVy = 2*atan((myu*w/2)/f)*180/pi
-FOVx = 2*atan((myu*l/2)/f)*180/pi
+FOVy = degrees(2*atan((myu*w/2)/f))
+FOVx = degrees(2*atan((myu*l/2)/f))
+print("FOV y: {}".format(FOVy))
+print("FOV x: {}".format(FOVx))
 
 #STEP 1: CONVERSION OF CELESTIAL COORDINATE SYSTEM TO STAR SENSOR COORDINATE SYSTEM
 a1 = (sin(ra)*cos(roll)) - (cos(ra)*sin(de)*sin(roll))
@@ -85,7 +102,7 @@ else:
 print("Reading in CSV file...\n")
 col_list = ["Star ID","RA","DE","Magnitude"]
 star_catalogue = pd.read_csv('Below_6.0_SAO.csv',usecols=col_list)
-R = (sqrt((x_fov**2)+(y_fov**2))/2)*pi/180
+R = (sqrt((radians(FOVx)**2)+(radians(FOVy)**2))/2)
 star_within_ra_range = ((ra - (R/cos(de))) <= star_catalogue['RA']) & (star_catalogue['RA'] <= (ra + (R/cos(de))))
 star_within_de_range = ((de - R) <= star_catalogue['DE']) & (star_catalogue['DE'] <= (de + R))
 star_in_ra = star_catalogue[star_within_ra_range]
@@ -113,18 +130,32 @@ for i in range(len(ra_i)):
     star_sensor_coordinates.append(coordinates)
 
 #Coordinates in image
-print("*"*60,"\nImage edges coordinates:\n")
 image_edges = []
 for coord in edges_coordinates:
     x = f*(coord[0]/coord[2])
     y = f*(coord[1]/coord[2])
     image_edges.append([x,y])
-    print([x,y])
 
-print("*"*60,"\nStar coordinates:\n")
 star_loc = []
 for coord in star_sensor_coordinates:
     x = f*(coord[0]/coord[2])
     y = f*(coord[1]/coord[2])
     star_loc.append((x,y))
-    print((x,y))
+
+xtot = 2*tan(radians(FOVx)/2)*f
+ytot = 2*tan(radians(FOVy)/2)*f
+xpixel = l/xtot
+ypixel = w/ytot
+
+pixel_coordinates = []
+for x1,y1 in star_loc:
+    x1 = float(x1)
+    y1 = float(y1)
+    x1pixel = round(xpixel*x1)
+    y1pixel = round(ypixel*y1)
+    pixel_coordinates.append((x1pixel,y1pixel))
+    print(x1pixel,y1pixel)
+
+background = np.zeros((w,l))
+cv2.imshow("Image",background)
+cv2.waitKey()
