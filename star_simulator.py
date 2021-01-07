@@ -128,6 +128,7 @@ star_sensor_coordinates = []
 for i in range(len(ra_i)):
     coordinates = dir_vector_to_star_sensor(ra_i[i],de_i[i],M_transpose=M_transpose)
     star_sensor_coordinates.append(coordinates)
+    print(coordinates)
 
 #Coordinates in image
 image_edges = []
@@ -157,5 +158,9 @@ for x1,y1 in star_loc:
     print(x1pixel,y1pixel)
 
 background = np.zeros((w,l))
+for x,y in pixel_coordinates:
+    x = int(l/2 + x)
+    y = int(w/2 + y)
+    cv2.circle(background,(x,y),4,(255),-1)
 cv2.imshow("Image",background)
 cv2.waitKey()
