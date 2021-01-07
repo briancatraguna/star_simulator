@@ -1,4 +1,4 @@
-from math import radians,degrees,sin,cos,tan,sqrt
+from math import radians,degrees,sin,cos,tan,sqrt,atan
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -39,15 +39,19 @@ ra = radians(float(input("Enter the right ascension angle in degrees:\n")))
 de = radians(float(input("Enter the declination angle in degrees:\n")))
 roll = radians(float(input("Enter the roll angle in degrees:\n")))
 
-#FOV prompt from user
-x_fov = radians(float(input("Enter the X - axis FOV in degrees:\n")))
-y_fov = radians(float(input("Enter the Y - axis FOV in degrees:\n")))
-
-l = degrees(x_fov)*120 #Arbitrary
-w = degrees(y_fov)*120 #Arbitrary
+#Angle/pixel
+myu = 1.12*(10**-6)
 
 #Focal length prompt from user
-f = float(input("Enter focal length:\n"))
+f = 0.003044898
+
+#Star sensor pixel
+l = 3280
+w = 2464
+
+#Star sensor FOV
+FOVy = 2*atan((myu*w/2)/f)*180/pi
+FOVx = 2*atan((myu*l/2)/f)*180/pi
 
 #STEP 1: CONVERSION OF CELESTIAL COORDINATE SYSTEM TO STAR SENSOR COORDINATE SYSTEM
 a1 = (sin(ra)*cos(roll)) - (cos(ra)*sin(de)*sin(roll))
@@ -81,7 +85,7 @@ else:
 print("Reading in CSV file...\n")
 col_list = ["Star ID","RA","DE","Magnitude"]
 star_catalogue = pd.read_csv('Below_6.0_SAO.csv',usecols=col_list)
-R = sqrt((x_fov**2)+(y_fov**2))/2
+R = (sqrt((x_fov**2)+(y_fov**2))/2)*pi/180
 star_within_ra_range = ((ra - (R/cos(de))) <= star_catalogue['RA']) & (star_catalogue['RA'] <= (ra + (R/cos(de))))
 star_within_de_range = ((de - R) <= star_catalogue['DE']) & (star_catalogue['DE'] <= (de + R))
 star_in_ra = star_catalogue[star_within_ra_range]
@@ -112,15 +116,15 @@ for i in range(len(ra_i)):
 print("*"*60,"\nImage edges coordinates:\n")
 image_edges = []
 for coord in edges_coordinates:
-    x = coord[0]/coord[2]
-    y = coord[1]/coord[2]
+    x = f*(coord[0]/coord[2])
+    y = f*(coord[1]/coord[2])
     image_edges.append([x,y])
     print([x,y])
 
 print("*"*60,"\nStar coordinates:\n")
 star_loc = []
 for coord in star_sensor_coordinates:
-    x = coord[0]/coord[2]
-    y = coord[1]/coord[2]
+    x = f*(coord[0]/coord[2])
+    y = f*(coord[1]/coord[2])
     star_loc.append((x,y))
     print((x,y))
