@@ -124,20 +124,3 @@ for coord in star_sensor_coordinates:
     y = coord[1]/coord[2]
     star_loc.append((x,y))
     print((x,y))
-
-xtot = 2*tan(x_fov/2)*f #meters
-ytot = 2*tan(y_fov/2)*f #meters
-print("xtot:",xtot)
-print("ytot:",ytot)
-xpixel = l/xtot #pixel/meters
-ypixel = w/ytot #pixel/meters
-print("Width:",w)
-print("Length:",l)
-
-star_in_pixel_coordinates = []
-for x,y in star_loc:
-    x1pixel = round(xpixel*float(x)) #pixel
-    y1pixel = round(ypixel*float(y)) #pixel
-    star_in_pixel_coordinates.append((x1pixel,y1pixel))
-
-print(star_in_pixel_coordinates)
