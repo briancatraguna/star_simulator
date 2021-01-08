@@ -54,7 +54,7 @@ ra = radians(float(input("Enter the right ascension angle in degrees:\n")))
 de = radians(float(input("Enter the declination angle in degrees:\n")))
 roll = radians(float(input("Enter the roll angle in degrees:\n")))
 
-#Angle/pixel
+#length/pixel
 myu = 0.25*(10**-6)
 
 #Focal length prompt from user
@@ -116,6 +116,9 @@ B = ((ra + (R/cos(de))),(de - R)) #Bottom right
 C = ((ra + (R/cos(de))),(de + R)) #Top right
 D = ((ra - (R/cos(de))),(de + R)) #Top left
 edges = [A,B,C,D]
+print("Edges:\n")
+for ra,de in edges:
+    print(degrees(ra),degrees(de))
 edges_coordinates = []
 for ra,de in edges:
     coordinates = dir_vector_to_star_sensor(ra,de,M_transpose=M_transpose)
@@ -124,6 +127,12 @@ for ra,de in edges:
 #Converting to star sensor coordinate system
 ra_i = list(stars_within_FOV['RA'])
 de_i = list(stars_within_FOV['DE'])
+print("Length of RA:{}".format(len(ra_i)))
+for ra in ra_i:
+    print(degrees(ra))
+print("Length of DE:{}".format(len(de_i)))
+for de in de_i:
+    print(degrees(de))
 star_sensor_coordinates = []
 for i in range(len(ra_i)):
     coordinates = dir_vector_to_star_sensor(ra_i[i],de_i[i],M_transpose=M_transpose)
@@ -142,6 +151,7 @@ for coord in star_sensor_coordinates:
     x = f*(coord[0]/coord[2])
     y = f*(coord[1]/coord[2])
     star_loc.append((x,y))
+    print(x,y)
 
 xtot = 2*tan(radians(FOVx)/2)*f
 ytot = 2*tan(radians(FOVy)/2)*f
@@ -159,8 +169,4 @@ for x1,y1 in star_loc:
 
 background = np.zeros((w,l))
 for x,y in pixel_coordinates:
-    x = int(l/2 + x)
-    y = int(w/2 + y)
-    cv2.circle(background,(x,y),4,(255),-1)
-cv2.imshow("Image",background)
-cv2.waitKey()
+    print(x,y)
