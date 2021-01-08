@@ -144,7 +144,7 @@ image_edges = []
 for coord in edges_coordinates:
     x = f*(coord[0]/coord[2])
     y = f*(coord[1]/coord[2])
-    image_edges.append([x,y])
+    image_edges.append((x,y))
 
 star_loc = []
 for coord in star_sensor_coordinates:
@@ -158,6 +158,14 @@ ytot = 2*tan(radians(FOVy)/2)*f
 xpixel = l/xtot
 ypixel = w/ytot
 
+edge_pixel_coordinates = []
+for x1,y1 in image_edges:
+    x1 = float(x1)
+    y1 = float(y1)
+    x1pixel = round(xpixel*x1)
+    y1pixel = round(ypixel*y1)
+    edge_pixel_coordinates.append((x1pixel,y1pixel))
+
 pixel_coordinates = []
 for x1,y1 in star_loc:
     x1 = float(x1)
@@ -165,8 +173,11 @@ for x1,y1 in star_loc:
     x1pixel = round(xpixel*x1)
     y1pixel = round(ypixel*y1)
     pixel_coordinates.append((x1pixel,y1pixel))
-    print(x1pixel,y1pixel)
 
 background = np.zeros((w,l))
 for x,y in pixel_coordinates:
     print(x,y)
+
+print("Edges coordinates:\n")
+for coord in edge_pixel_coordinates:
+    print(coord[0],coord[1])
