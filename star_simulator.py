@@ -107,6 +107,8 @@ alpha_start = (ra - (R/cos(de)))
 alpha_end = (ra + (R/cos(de)))
 delta_start = (de - R)
 delta_end = (de + R)
+print("RA range: {0} to {1}".format(alpha_start,alpha_end))
+print("DE range: {0} to {1}".format(delta_start,delta_end))
 star_within_ra_range = (alpha_start <= star_catalogue['RA']) & (star_catalogue['RA'] <= alpha_end)
 star_within_de_range = (delta_start <= star_catalogue['DE']) & (star_catalogue['DE'] <= delta_end)
 star_in_ra = star_catalogue[star_within_ra_range]
@@ -119,29 +121,26 @@ print(stars_within_FOV)
 ra_i = list(stars_within_FOV['RA'])
 de_i = list(stars_within_FOV['DE'])
 star_sensor_coordinates = []
+print("Star sensor coordinates:\n")
 for i in range(len(ra_i)):
     coordinates = dir_vector_to_star_sensor(ra_i[i],de_i[i],M_transpose=M_transpose)
     star_sensor_coordinates.append(coordinates)
+    print(coordinates)
 
 #Coordinates in image
 star_loc = []
+print("Image coordinates:\n")
 for coord in star_sensor_coordinates:
     x = f*(coord[0]/coord[2])
     y = f*(coord[1]/coord[2])
     star_loc.append((x,y))
+    print("X: {}".format(x))
+    print("Y: {}".format(y))
 
 xtot = 2*tan(radians(FOVx)/2)*f
 ytot = 2*tan(radians(FOVy)/2)*f
 xpixel = l/xtot
 ypixel = w/ytot
-
-edge_pixel_coordinates = []
-for x1,y1 in image_edges:
-    x1 = float(x1)
-    y1 = float(y1)
-    x1pixel = round(xpixel*x1)
-    y1pixel = round(ypixel*y1)
-    edge_pixel_coordinates.append((x1pixel,y1pixel))
 
 pixel_coordinates = []
 for x1,y1 in star_loc:
