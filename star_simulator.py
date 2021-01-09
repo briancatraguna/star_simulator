@@ -107,28 +107,13 @@ alpha_start = (ra - (R/cos(de)))
 alpha_end = (ra + (R/cos(de)))
 delta_start = (de - R)
 delta_end = (de + R)
-print(alpha_start,alpha_end)
-print(delta_start,delta_end)
-star_within_ra_range = ((ra - (R/cos(de))) <= star_catalogue['RA']) & (star_catalogue['RA'] <= (ra + (R/cos(de))))
-star_within_de_range = ((de - R) <= star_catalogue['DE']) & (star_catalogue['DE'] <= (de + R))
+star_within_ra_range = (alpha_start <= star_catalogue['RA']) & (star_catalogue['RA'] <= alpha_end)
+star_within_de_range = (delta_start <= star_catalogue['DE']) & (star_catalogue['DE'] <= delta_end)
 star_in_ra = star_catalogue[star_within_ra_range]
 star_in_de = star_catalogue[star_within_de_range]
 star_in_de = star_in_de[['Star ID']].copy()
 stars_within_FOV = pd.merge(star_in_ra,star_in_de,on="Star ID")
-
 print(stars_within_FOV)
-#Find A,B,C,D
-A = ((ra - (R/cos(de))),(de - R)) #Bottom left
-B = ((ra + (R/cos(de))),(de - R)) #Bottom right
-C = ((ra + (R/cos(de))),(de + R)) #Top right
-D = ((ra - (R/cos(de))),(de + R)) #Top left
-edges = [A,B,C,D]
-for ra,de in edges:
-    print(degrees(ra),degrees(de))
-edges_coordinates = []
-for ra,de in edges:
-    coordinates = dir_vector_to_star_sensor(ra,de,M_transpose=M_transpose)
-    edges_coordinates.append(coordinates)
 
 #Converting to star sensor coordinate system
 ra_i = list(stars_within_FOV['RA'])
@@ -139,12 +124,6 @@ for i in range(len(ra_i)):
     star_sensor_coordinates.append(coordinates)
 
 #Coordinates in image
-image_edges = []
-for coord in edges_coordinates:
-    x = f*(coord[0]/coord[2])
-    y = f*(coord[1]/coord[2])
-    image_edges.append((x,y))
-
 star_loc = []
 for coord in star_sensor_coordinates:
     x = f*(coord[0]/coord[2])
