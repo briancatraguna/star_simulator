@@ -103,6 +103,12 @@ print("Reading in CSV file...\n")
 col_list = ["Star ID","RA","DE","Magnitude"]
 star_catalogue = pd.read_csv('Below_6.0_SAO.csv',usecols=col_list)
 R = (sqrt((radians(FOVx)**2)+(radians(FOVy)**2))/2)
+alpha_start = (ra - (R/cos(de)))
+alpha_end = (ra + (R/cos(de)))
+delta_start = (de - R)
+delta_end = (de + R)
+print(alpha_start,alpha_end)
+print(delta_start,delta_end)
 star_within_ra_range = ((ra - (R/cos(de))) <= star_catalogue['RA']) & (star_catalogue['RA'] <= (ra + (R/cos(de))))
 star_within_de_range = ((de - R) <= star_catalogue['DE']) & (star_catalogue['DE'] <= (de + R))
 star_in_ra = star_catalogue[star_within_ra_range]
@@ -110,13 +116,13 @@ star_in_de = star_catalogue[star_within_de_range]
 star_in_de = star_in_de[['Star ID']].copy()
 stars_within_FOV = pd.merge(star_in_ra,star_in_de,on="Star ID")
 
+print(stars_within_FOV)
 #Find A,B,C,D
 A = ((ra - (R/cos(de))),(de - R)) #Bottom left
 B = ((ra + (R/cos(de))),(de - R)) #Bottom right
 C = ((ra + (R/cos(de))),(de + R)) #Top right
 D = ((ra - (R/cos(de))),(de + R)) #Top left
 edges = [A,B,C,D]
-print("Edges:\n")
 for ra,de in edges:
     print(degrees(ra),degrees(de))
 edges_coordinates = []
@@ -127,17 +133,10 @@ for ra,de in edges:
 #Converting to star sensor coordinate system
 ra_i = list(stars_within_FOV['RA'])
 de_i = list(stars_within_FOV['DE'])
-print("Length of RA:{}".format(len(ra_i)))
-for ra in ra_i:
-    print(degrees(ra))
-print("Length of DE:{}".format(len(de_i)))
-for de in de_i:
-    print(degrees(de))
 star_sensor_coordinates = []
 for i in range(len(ra_i)):
     coordinates = dir_vector_to_star_sensor(ra_i[i],de_i[i],M_transpose=M_transpose)
     star_sensor_coordinates.append(coordinates)
-    print(coordinates)
 
 #Coordinates in image
 image_edges = []
@@ -151,7 +150,6 @@ for coord in star_sensor_coordinates:
     x = f*(coord[0]/coord[2])
     y = f*(coord[1]/coord[2])
     star_loc.append((x,y))
-    print(x,y)
 
 xtot = 2*tan(radians(FOVx)/2)*f
 ytot = 2*tan(radians(FOVy)/2)*f
@@ -175,9 +173,3 @@ for x1,y1 in star_loc:
     pixel_coordinates.append((x1pixel,y1pixel))
 
 background = np.zeros((w,l))
-for x,y in pixel_coordinates:
-    print(x,y)
-
-print("Edges coordinates:\n")
-for coord in edge_pixel_coordinates:
-    print(coord[0],coord[1])
