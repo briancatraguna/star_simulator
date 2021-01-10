@@ -28,6 +28,7 @@ def draw_star(x,y,magnitude,background):
         magnitude ([float]): [The stellar magnitude]
         background ([numpy array]): [background image]
     """
+    
 
 
 def displayImg(img,cmap=None):
