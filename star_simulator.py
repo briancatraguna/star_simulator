@@ -28,7 +28,26 @@ def draw_star(x,y,magnitude,background):
         magnitude ([float]): [The stellar magnitude]
         background ([numpy array]): [background image]
     """
-    
+    #Imaging parameters
+    k1 = 1000
+    k2 = 1
+    k3 = 1
+    H = k1**((-k2*magnitude)+k3)
+    sigma = 1
+
+    #Find radius of star in image
+    x_step = x
+    y_step = y
+    const = H/(2*pi*(sigma**2))
+    x_diff = (x-x_step)**2
+    y_diff = (y-y_step)**2
+    den = 2*(sigma**2)
+    intensity = const**(-(x_diff+y_diff)/den)
+    while intensity > 5:
+        x_step -= 1
+        y_step -= 1
+        
+
 
 
 def displayImg(img,cmap=None):
