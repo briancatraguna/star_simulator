@@ -55,14 +55,16 @@ de = radians(float(input("Enter the declination angle in degrees:\n")))
 roll = radians(float(input("Enter the roll angle in degrees:\n")))
 
 #length/pixel
-myu = 0.25*(10**-6)
+myu = 0.5*(10**-6)
 
 #Focal length prompt from user
 f = 0.003044898
 
 #Star sensor pixel
-l = 3280
-w = 2464
+l = 1920
+w = 1080
+print("Resolution length: {}".format(l))
+print("Resolution width: {}".format(w))
 
 #Star sensor FOV
 FOVy = degrees(2*atan((myu*w/2)/f))
@@ -137,17 +139,34 @@ for coord in star_sensor_coordinates:
     print("X: {}".format(x))
     print("Y: {}".format(y))
 
-xtot = 2*tan(radians(FOVx)/2)*f
-ytot = 2*tan(radians(FOVy)/2)*f
+x_range = abs(alpha_end-alpha_start)
+y_range = abs(delta_end-delta_start)
+xtot = 2*tan(x_range/2)*f
+ytot = 2*tan(y_range/2)*f
 xpixel = l/xtot
 ypixel = w/ytot
 
 pixel_coordinates = []
+print("*"*100)
+print("Pixel coordinates:\n")
 for x1,y1 in star_loc:
     x1 = float(x1)
     y1 = float(y1)
     x1pixel = round(xpixel*x1)
     y1pixel = round(ypixel*y1)
     pixel_coordinates.append((x1pixel,y1pixel))
+    print("X: {}".format(x1pixel))
+    print("Y: {}".format(y1pixel))
+
 
 background = np.zeros((w,l))
+for star in pixel_coordinates:
+    x,y = star #X: kanan ke kiri, Y: atas ke bawah
+    x = round(l/2 + x)
+    y = round(w/2 - y)
+    cv2.circle(background,(x,y),5,(255,255,255),-1)
+    print(x,y)
+
+
+cv2.imshow("Image",background)
+cv2.waitKey(0)
