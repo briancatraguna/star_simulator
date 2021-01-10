@@ -18,22 +18,6 @@ def dir_vector_to_star_sensor(ra,de,M_transpose):
     dir_vector_matrix = np.array([[x_dir_vector],[y_dir_vector],[z_dir_vector]])
     return M_transpose.dot(dir_vector_matrix)
 
-def find_edges(arr):
-    """[Finds the respective edges]
-
-    Args:
-        arr ([arr]): [array of arrays containing x and y of the edges]
-
-    Returns:
-        [tuple]: [tuple of coordinates including top left, top right, bottom left, bottom right respectively]
-    """
-    x = arr[:][0]
-    y = arr[:][1]
-    top_left = (min(x),max(y))
-    top_right = (max(x),max(y))
-    bottom_left = (min(x),min(y))
-    bottom_right = (max(x),min(y))
-    return top_left,top_right,bottom_left,bottom_right
 
 def displayImg(img,cmap=None):
     """[Displays image]
