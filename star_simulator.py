@@ -19,6 +19,17 @@ def dir_vector_to_star_sensor(ra,de,M_transpose):
     return M_transpose.dot(dir_vector_matrix)
 
 
+def draw_star(x,y,magnitude,background):
+    """[Draws the star in the background image]
+
+    Args:
+        x ([int]): [The x coordinate in the image coordinate system (starting from left to right)]
+        y ([int]): [The y coordinate in the image coordinate system (starting from top to bottom)]
+        magnitude ([float]): [The stellar magnitude]
+        background ([numpy array]): [background image]
+    """
+
+
 def displayImg(img,cmap=None):
     """[Displays image]
 
