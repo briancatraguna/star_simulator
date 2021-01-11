@@ -19,33 +19,33 @@ def dir_vector_to_star_sensor(ra,de,M_transpose):
     return M_transpose.dot(dir_vector_matrix)
 
 
-def draw_star(x,y,magnitude,background):
-    """[Draws the star in the background image]
+# def draw_star(x,y,magnitude,background):
+#     """[Draws the star in the background image]
 
-    Args:
-        x ([int]): [The x coordinate in the image coordinate system (starting from left to right)]
-        y ([int]): [The y coordinate in the image coordinate system (starting from top to bottom)]
-        magnitude ([float]): [The stellar magnitude]
-        background ([numpy array]): [background image]
-    """
-    #Imaging parameters
-    k1 = 1000
-    k2 = 1
-    k3 = 1
-    H = k1**((-k2*magnitude)+k3)
-    sigma = 1
+#     Args:
+#         x ([int]): [The x coordinate in the image coordinate system (starting from left to right)]
+#         y ([int]): [The y coordinate in the image coordinate system (starting from top to bottom)]
+#         magnitude ([float]): [The stellar magnitude]
+#         background ([numpy array]): [background image]
+#     """
+#     #Imaging parameters
+#     k1 = 1000
+#     k2 = 1
+#     k3 = 1
+#     H = k1**((-k2*magnitude)+k3)
+#     sigma = 1
 
-    #Find radius of star in image
-    x_step = x
-    y_step = y
-    const = H/(2*pi*(sigma**2))
-    x_diff = (x-x_step)**2
-    y_diff = (y-y_step)**2
-    den = 2*(sigma**2)
-    intensity = const**(-(x_diff+y_diff)/den)
-    while intensity > 5:
-        x_step -= 1
-        y_step -= 1
+#     #Find radius of star in image
+#     x_step = x
+#     y_step = y
+#     const = H/(2*pi*(sigma**2))
+#     x_diff = (x-x_step)**2
+#     y_diff = (y-y_step)**2
+#     den = 2*(sigma**2)
+#     intensity = const**(-(x_diff+y_diff)/den)
+#     while intensity > 5:
+#         x_step -= 1
+#         y_step -= 1
         
 
 
@@ -70,10 +70,10 @@ de = radians(float(input("Enter the declination angle in degrees:\n")))
 roll = radians(float(input("Enter the roll angle in degrees:\n")))
 
 #length/pixel
-myu = 0.5*(10**-6)
+myu = 3*(10**-6)
 
 #Focal length prompt from user
-f = 0.003044898
+f = 0.016
 
 #Star sensor pixel
 l = 1920
@@ -154,10 +154,8 @@ for coord in star_sensor_coordinates:
     print("X: {}".format(x))
     print("Y: {}".format(y))
 
-x_range = abs(alpha_end-alpha_start)
-y_range = abs(delta_end-delta_start)
-xtot = 2*tan(x_range/2)*f
-ytot = 2*tan(y_range/2)*f
+xtot = 2*tan(radians(FOVx)/2)*f
+ytot = 2*tan(radians(FOVy)/2)*f
 xpixel = l/xtot
 ypixel = w/ytot
 
@@ -172,16 +170,3 @@ for x1,y1 in star_loc:
     pixel_coordinates.append((x1pixel,y1pixel))
     print("X: {}".format(x1pixel))
     print("Y: {}".format(y1pixel))
-
-
-background = np.zeros((w,l))
-for star in pixel_coordinates:
-    x,y = star #X: kanan ke kiri, Y: atas ke bawah
-    x = round(l/2 + x)
-    y = round(w/2 - y)
-    cv2.circle(background,(x,y),5,(255,255,255),-1)
-    print(x,y)
-
-
-cv2.imshow("Image",background)
-cv2.waitKey(0)
