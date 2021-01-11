@@ -19,33 +19,17 @@ def dir_vector_to_star_sensor(ra,de,M_transpose):
     return M_transpose.dot(dir_vector_matrix)
 
 
-# def draw_star(x,y,magnitude,background):
-#     """[Draws the star in the background image]
+def draw_star(x,y,magnitude,background):
+    """[Draws the star in the background image]
 
-#     Args:
-#         x ([int]): [The x coordinate in the image coordinate system (starting from left to right)]
-#         y ([int]): [The y coordinate in the image coordinate system (starting from top to bottom)]
-#         magnitude ([float]): [The stellar magnitude]
-#         background ([numpy array]): [background image]
-#     """
-#     #Imaging parameters
-#     k1 = 1000
-#     k2 = 1
-#     k3 = 1
-#     H = k1**((-k2*magnitude)+k3)
-#     sigma = 1
+    Args:
+        x ([int]): [The x coordinate in the image coordinate system (starting from left to right)]
+        y ([int]): [The y coordinate in the image coordinate system (starting from top to bottom)]
+        magnitude ([float]): [The stellar magnitude]
+        background ([numpy array]): [background image]
+    """
 
-#     #Find radius of star in image
-#     x_step = x
-#     y_step = y
-#     const = H/(2*pi*(sigma**2))
-#     x_diff = (x-x_step)**2
-#     y_diff = (y-y_step)**2
-#     den = 2*(sigma**2)
-#     intensity = const**(-(x_diff+y_diff)/den)
-#     while intensity > 5:
-#         x_step -= 1
-#         y_step -= 1
+    
         
 
 
@@ -165,8 +149,14 @@ print("Pixel coordinates:\n")
 for x1,y1 in star_loc:
     x1 = float(x1)
     y1 = float(y1)
+    if abs(x1) > l/2 or abs(y1) > w/2:
+        continue
     x1pixel = round(xpixel*x1)
     y1pixel = round(ypixel*y1)
     pixel_coordinates.append((x1pixel,y1pixel))
     print("X: {}".format(x1pixel))
     print("Y: {}".format(y1pixel))
+
+magnitude_mv = list(stars_within_FOV['Magnitude'])
+
+for i in range(len(magnitude_mv)):
