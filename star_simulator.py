@@ -1,4 +1,4 @@
-from math import radians,degrees,sin,cos,tan,sqrt,atan,pi
+from math import radians,degrees,sin,cos,tan,sqrt,atan,pi,exp
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -28,11 +28,10 @@ def draw_star(x,y,magnitude,background):
         magnitude ([float]): [The stellar magnitude]
         background ([numpy array]): [background image]
     """
-
+    H = 1000*exp(-magnitude+1)
     
+
         
-
-
 
 def displayImg(img,cmap=None):
     """[Displays image]
