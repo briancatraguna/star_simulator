@@ -172,6 +172,7 @@ for i,(x1,y1) in enumerate(star_loc):
 for index in delete_indices:
     del magnitude_mv[index]
 
+background = np.zeros((w,l))
 
 for i in range(len(magnitude_mv)):
     x = round(l/2 + pixel_coordinates[i][0])
