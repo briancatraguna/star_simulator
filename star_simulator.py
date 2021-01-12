@@ -29,9 +29,18 @@ def draw_star(x,y,magnitude,background):
         background ([numpy array]): [background image]
     """
     H = 1000*exp(-magnitude+1)
-    
+    (length,width) = np.shape(background)
+    for u in range(length):
+        for v in range(width):
+            dist = sqrt(((u-x)**2)+((v-y)**2))
+            if dist > 5:
+                continue
+            diff = (dist**2)/2
+            exponent_exp = 1/(exp(diff))
+            raw_intensity = (H/(2*pi))*exponent_exp
+            background[u,v] = raw_intensity
+    return background
 
-        
 
 def displayImg(img,cmap=None):
     """[Displays image]
@@ -142,13 +151,17 @@ ytot = 2*tan(radians(FOVy)/2)*f
 xpixel = l/xtot
 ypixel = w/ytot
 
+magnitude_mv = list(stars_within_FOV['Magnitude'])
+
 pixel_coordinates = []
 print("*"*100)
 print("Pixel coordinates:\n")
-for x1,y1 in star_loc:
+delete_indices = []
+for i,(x1,y1) in enumerate(star_loc):
     x1 = float(x1)
     y1 = float(y1)
     if abs(x1) > l/2 or abs(y1) > w/2:
+        delete_indices.append(i)
         continue
     x1pixel = round(xpixel*x1)
     y1pixel = round(ypixel*y1)
@@ -156,6 +169,19 @@ for x1,y1 in star_loc:
     print("X: {}".format(x1pixel))
     print("Y: {}".format(y1pixel))
 
-magnitude_mv = list(stars_within_FOV['Magnitude'])
+for index in delete_indices:
+    del magnitude_mv[index]
+
+background = np.zeros((w,l))
+cv2.imshow("Image",background)
+cv2.waitKey(0)
 
 for i in range(len(magnitude_mv)):
+    x = round(l/2 + pixel_coordinates[i][0])
+    y = round(w/2 - pixel_coordinates[i][1])
+    print("Drawing star {0} of {1}".format(i+1,len(magnitude_mv)))
+    print("Location:\n X:{0}, Y:{1}".format(x,y))
+    background = draw_star(x,y,magnitude=magnitude_mv[i],background=background)
+
+cv2.imshow("Image",background)
+cv2.waitKey(0)
