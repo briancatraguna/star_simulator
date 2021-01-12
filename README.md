@@ -1,5 +1,8 @@
 # Star Simulator Software Development
-Development of star simulator software for star sensor research during my internship in the National Institute of Aeronautics and Space (Lembaga Penerbangan dan Antariksa Nasional)
+Development of star simulator software for star sensor research during my internship in the National Institute of Aeronautics and Space (Lembaga Penerbangan dan Antariksa Nasional). This software will generate star image by the user by first providing three inputs which are:
+1. Right ascension (α)
+2. Declination (δ)
+3. Roll (ψ)
 
 ## Description
 In this repository, the main file that generates the star image is ```star_simulator.py```. Other files include:
