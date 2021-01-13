@@ -19,7 +19,7 @@ def dir_vector_to_star_sensor(ra,de,M_transpose):
     return M_transpose.dot(dir_vector_matrix)
 
 
-def draw_star(x,y,magnitude,background,ROI=3):
+def draw_star(x,y,magnitude,background,ROI=6):
     """[Draws the star in the background image]
 
     Args:
@@ -160,16 +160,17 @@ delete_indices = []
 for i,(x1,y1) in enumerate(star_loc):
     x1 = float(x1)
     y1 = float(y1)
-    if abs(x1) > l/2 or abs(y1) > w/2:
-        delete_indices.append(i)
-        continue
     x1pixel = round(xpixel*x1)
     y1pixel = round(ypixel*y1)
+    if abs(x1pixel) > l/2 or abs(y1pixel) > w/2:
+        delete_indices.append(i)
+        continue
     pixel_coordinates.append((x1pixel,y1pixel))
     print("X: {}".format(x1pixel))
     print("Y: {}".format(y1pixel))
 
 for index in delete_indices:
+    print(index)
     del magnitude_mv[index]
 
 background = np.zeros((w,l))
@@ -179,6 +180,3 @@ for i in range(len(magnitude_mv)):
     y = round(w/2 - pixel_coordinates[i][1])
     print("Drawing star {0} of {1}".format(i+1,len(magnitude_mv)))
     print("Location:\n X:{0}, Y:{1}".format(x,y))
-    background = draw_star(x,y,magnitude=magnitude_mv[i],background=background)
-
-displayImg(background,cmap='gray')
