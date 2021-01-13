@@ -19,7 +19,7 @@ def dir_vector_to_star_sensor(ra,de,M_transpose):
     return M_transpose.dot(dir_vector_matrix)
 
 
-def draw_star(x,y,magnitude,background):
+def draw_star(x,y,magnitude,background,ROI=3):
     """[Draws the star in the background image]
 
     Args:
@@ -27,18 +27,19 @@ def draw_star(x,y,magnitude,background):
         y ([int]): [The y coordinate in the image coordinate system (starting from top to bottom)]
         magnitude ([float]): [The stellar magnitude]
         background ([numpy array]): [background image]
+        ROI ([int]): [The ROI of each star in pixel radius]
     """
     H = 1000*exp(-magnitude+1)
     (length,width) = np.shape(background)
-    for u in range(length):
-        for v in range(width):
-            dist = sqrt(((u-x)**2)+((v-y)**2))
-            if dist > 5:
-                continue
-            diff = (dist**2)/2
+    for u in range(x-ROI,x+ROI+1):
+        for v in range(y-ROI,x+ROI+1):
+            print(u,v)
+            dist = ((u-x)**2)+((v-y)**2)
+            diff = (dist)/2
             exponent_exp = 1/(exp(diff))
             raw_intensity = (H/(2*pi))*exponent_exp
-            background[u,v] = raw_intensity
+            background[v,u] = raw_intensity
+
     return background
 
 
@@ -49,7 +50,6 @@ def displayImg(img,cmap=None):
         img ([numpy array]): [the pixel values in the form of numpy array]
         cmap ([string], optional): [can be 'gray']. Defaults to None.
     """
-    img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
     fig = plt.figure(figsize=(12,10))
     ax = fig.add_subplot(111)
     ax.imshow(img,cmap)
@@ -181,5 +181,4 @@ for i in range(len(magnitude_mv)):
     print("Location:\n X:{0}, Y:{1}".format(x,y))
     background = draw_star(x,y,magnitude=magnitude_mv[i],background=background)
 
-cv2.imshow("Image",background)
-cv2.waitKey(0)
+displayImg(background,cmap='gray')
