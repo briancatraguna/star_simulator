@@ -48,6 +48,7 @@ def draw_star(x,y,magnitude,gaussian,background,ROI=5):
         # color = 
         # cv2.circle(background,(x,y),radius,color,thickness=-1)
         cv2.circle(background,(x,y),2,255,thickness=-1)
+    return background
 
 
 def displayImg(img,cmap=None):
