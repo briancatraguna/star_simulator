@@ -32,7 +32,6 @@ def draw_star(x,y,magnitude,background,ROI=5):
     H = 1000*exp(-magnitude+1)
     for u in range(x-ROI,x+ROI+1):
         for v in range(y-ROI,y+ROI+1):
-            print(u,v)
             dist = ((u-x)**2)+((v-y)**2)
             diff = (dist)/2
             exponent_exp = 1/(exp(diff))
