@@ -30,12 +30,13 @@ def draw_star(x,y,magnitude,background,ROI=5):
         ROI ([int]): [The ROI of each star in pixel radius]
     """
     H = 1000*exp(-magnitude+1)
+    sigma = 5
     for u in range(x-ROI,x+ROI+1):
         for v in range(y-ROI,y+ROI+1):
             dist = ((u-x)**2)+((v-y)**2)
-            diff = (dist)/2
+            diff = (dist)/(2*(sigma**2))
             exponent_exp = 1/(exp(diff))
-            raw_intensity = int(round((H/(2*pi))*exponent_exp))
+            raw_intensity = int(round((H/(2*pi*(sigma**2)))*exponent_exp))
             background[v,u] = raw_intensity
 
     return background
