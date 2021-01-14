@@ -171,12 +171,14 @@ for i,(x1,y1) in enumerate(star_loc):
     print("Y: {}".format(y1pixel))
 
 background = np.zeros((w,l))
-
+print("*"*60)
+print("New pixel coordinates: ")
 for i in range(len(filtered_magnitude)):
     x = round(l/2 + pixel_coordinates[i][0])
     y = round(w/2 - pixel_coordinates[i][1])
-    print("Drawing star {0} of {1}".format(i+1,len(filtered_magnitude)))
-    print("Location:\n X:{0}, Y:{1}\nMagnitude: {2}".format(x,y,filtered_magnitude[i]))
+    print(f"X: {x}\nY: {y}")
+    print(f"Magnitude: {filtered_magnitude[i]}")
+    print("*"*40)
     background = draw_star(x,y,filtered_magnitude[i],background)
 
 displayImg(background,cmap='gray')
