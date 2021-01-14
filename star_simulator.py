@@ -96,9 +96,13 @@ def displayImg(img,cmap=None):
 
 
 #Right ascension, declination and roll input prompt from user
-ra = radians(float(input("Enter the right ascension angle in degrees:\n")))
-de = radians(float(input("Enter the declination angle in degrees:\n")))
-roll = radians(float(input("Enter the roll angle in degrees:\n")))
+ra0 = input("Enter the right ascension angle in degrees:\n")
+de0 = input("Enter the declination angle in degrees:\n")
+roll0 = input("Enter the roll angle in degrees:\n")
+
+ra = radians(float(ra0))
+de = radians(float(de0))
+roll = radians(float(roll0))
 
 #length/pixel
 myu = 3*(10**-6)
@@ -214,3 +218,6 @@ for i in range(len(filtered_magnitude)):
     background = draw_star(x,y,filtered_magnitude[i],False,background)
 
 displayImg(background,cmap='gray')
+
+file_name = f"ra{ra0}_de{de0}_roll{roll0}.jpg"
+cv2.imwrite("sample_images/"+file_name,background)
