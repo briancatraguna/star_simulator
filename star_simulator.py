@@ -4,6 +4,37 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import cv2
 
+def create_M_matrix(ra,de,roll,method=2):
+    """[summary]
+
+    Args:
+        ra ([int]): [right ascension of sensor center]
+        de ([int]): [declination of sensor center]
+        roll ([int]): [roll angle of star sensor]
+        method ([int]): [1 for method 1(Calculating each elements),2 for method 2(calculating rotation matrices)]
+    """
+    if method == 1:
+        a1 = (sin(ra)*cos(roll)) - (cos(ra)*sin(de)*sin(roll))
+        a2 = -(sin(ra)*sin(roll)) - (cos(ra)*sin(de)*cos(roll))
+        a3 = -(cos(ra)*cos(de))
+        b1 = -(cos(ra)*cos(roll)) - (sin(ra)*sin(de)*sin(roll))
+        b2 = (cos(ra)*sin(roll)) - (sin(ra)*sin(de)*cos(roll))
+        b3 = -(sin(ra)*cos(de))
+        c1 = (cos(ra)*sin(roll))
+        c2 = (cos(ra)*cos(roll))
+        c3 = -(sin(de))
+        M = np.array([[a1,a2,a3],[b1,b2,b3],[c1,c2,c3]])
+    if method == 2:
+        ra_exp = ra - (pi/2)
+        de_exp = de + (pi/2)
+        M1 = np.array([[cos(ra_exp),-sin(ra_exp),0],[sin(ra_exp),cos(ra_exp),0],[0,0,1]])
+        M2 = np.array([[1,0,0],[0,cos(de_exp),-sin(de_exp)],[0,sin(de_exp),cos(de_exp)]])
+        M3 = np.array([[cos(roll),-sin(roll),0],[sin(roll),cos(roll),0],[0,0,1]])
+        first_second = np.matmul(M1,M2)
+        M = np.matmul(first_second,M3)
+    return M
+
+
 def dir_vector_to_star_sensor(ra,de,M_transpose):
     """[Converts direction vector to star sensor coordinates]
 
@@ -88,16 +119,7 @@ print("FOV y: {}".format(FOVy))
 print("FOV x: {}".format(FOVx))
 
 #STEP 1: CONVERSION OF CELESTIAL COORDINATE SYSTEM TO STAR SENSOR COORDINATE SYSTEM
-a1 = (sin(ra)*cos(roll)) - (cos(ra)*sin(de)*sin(roll))
-a2 = -(sin(ra)*sin(roll)) - (cos(ra)*sin(de)*cos(roll))
-a3 = -(cos(ra)*cos(de))
-b1 = -(cos(ra)*cos(roll)) - (sin(ra)*sin(de)*sin(roll))
-b2 = (cos(ra)*sin(roll)) - (sin(ra)*sin(de)*cos(roll))
-b3 = -(sin(ra)*cos(de))
-c1 = (cos(ra)*sin(roll))
-c2 = (cos(ra)*cos(roll))
-c3 = -(sin(de))
-M = np.array([[a1,a2,a3],[b1,b2,b3],[c1,c2,c3]])
+M = create_M_matrix(ra,de,roll)
 print("*"*80)
 print(f"Matrix M:\n {M}")
 
@@ -185,6 +207,7 @@ print("New pixel coordinates: ")
 for i in range(len(filtered_magnitude)):
     x = round(l/2 + pixel_coordinates[i][0])
     y = round(w/2 - pixel_coordinates[i][1])
+    print(f"Drawing star {i+1} of {len(filtered_magnitude)}...")
     print(f"X: {x}\nY: {y}")
     print(f"Magnitude: {filtered_magnitude[i]}")
     print("*"*40)
