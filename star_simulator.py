@@ -170,7 +170,7 @@ for i in range(len(ra_i)):
     star_sensor_coordinates.append(coordinates)
     print(coordinates)
 
-#Coordinates in image
+#STEP 2: CONVERSION OF STAR SENSOR COORDINATE SYSTEM TO IMAGE COORDINATE SYSTEM
 star_loc = []
 print("Image coordinates:\n")
 for coord in star_sensor_coordinates:
@@ -188,6 +188,7 @@ ypixel = w/ytot
 magnitude_mv = list(stars_within_FOV['Magnitude'])
 filtered_magnitude = []
 
+#Rescaling to pixel sizes
 pixel_coordinates = []
 print("*"*100)
 print("Pixel coordinates:\n")
