@@ -43,11 +43,11 @@ def draw_star(x,y,magnitude,gaussian,background,ROI=5):
                     print(raw_intensity)
                 background[v,u] = raw_intensity
     else:
-        # mag = abs(magnitude-7) #1 until 9
-        # radius = 
-        # color = 
-        # cv2.circle(background,(x,y),radius,color,thickness=-1)
-        cv2.circle(background,(x,y),2,255,thickness=-1)
+        mag = abs(magnitude-7) #1 until 9
+        radius = int(round((mag/9)*(4)+2))
+        color = int(round((mag/9)*(155)+100))
+        cv2.circle(background,(x,y),radius,color,thickness=-1)
+        # cv2.circle(background,(x,y),2,255,thickness=-1)
     return background
 
 
