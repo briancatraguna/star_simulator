@@ -19,27 +19,35 @@ def dir_vector_to_star_sensor(ra,de,M_transpose):
     return M_transpose.dot(dir_vector_matrix)
 
 
-def draw_star(x,y,magnitude,background,ROI=5):
+def draw_star(x,y,magnitude,gaussian,background,ROI=5):
     """[Draws the star in the background image]
 
     Args:
         x ([int]): [The x coordinate in the image coordinate system (starting from left to right)]
         y ([int]): [The y coordinate in the image coordinate system (starting from top to bottom)]
         magnitude ([float]): [The stellar magnitude]
+        gaussian ([bool]): [True if using the gaussian function, false if using own function]
         background ([numpy array]): [background image]
         ROI ([int]): [The ROI of each star in pixel radius]
     """
-    H = 1000*exp(-magnitude+1)
-    sigma = 5
-    for u in range(x-ROI,x+ROI+1):
-        for v in range(y-ROI,y+ROI+1):
-            dist = ((u-x)**2)+((v-y)**2)
-            diff = (dist)/(2*(sigma**2))
-            exponent_exp = 1/(exp(diff))
-            raw_intensity = int(round((H/(2*pi*(sigma**2)))*exponent_exp))
-            background[v,u] = raw_intensity
-
-    return background
+    if gaussian:
+        H = 2000*exp(-magnitude+1)
+        sigma = 5
+        for u in range(x-ROI,x+ROI+1):
+            for v in range(y-ROI,y+ROI+1):
+                dist = ((u-x)**2)+((v-y)**2)
+                diff = (dist)/(2*(sigma**2))
+                exponent_exp = 1/(exp(diff))
+                raw_intensity = int(round((H/(2*pi*(sigma**2)))*exponent_exp))
+                if u == x and v == y:
+                    print(raw_intensity)
+                background[v,u] = raw_intensity
+    else:
+        # mag = abs(magnitude-7) #1 until 9
+        # radius = 
+        # color = 
+        # cv2.circle(background,(x,y),radius,color,thickness=-1)
+        cv2.circle(background,(x,y),2,255,thickness=-1)
 
 
 def displayImg(img,cmap=None):
@@ -179,6 +187,6 @@ for i in range(len(filtered_magnitude)):
     print(f"X: {x}\nY: {y}")
     print(f"Magnitude: {filtered_magnitude[i]}")
     print("*"*40)
-    background = draw_star(x,y,filtered_magnitude[i],background)
+    background = draw_star(x,y,filtered_magnitude[i],False,background)
 
 displayImg(background,cmap='gray')
