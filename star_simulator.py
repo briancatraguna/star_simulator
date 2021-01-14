@@ -19,7 +19,7 @@ def dir_vector_to_star_sensor(ra,de,M_transpose):
     return M_transpose.dot(dir_vector_matrix)
 
 
-def draw_star(x,y,magnitude,background,ROI=6):
+def draw_star(x,y,magnitude,background,ROI=5):
     """[Draws the star in the background image]
 
     Args:
@@ -30,14 +30,13 @@ def draw_star(x,y,magnitude,background,ROI=6):
         ROI ([int]): [The ROI of each star in pixel radius]
     """
     H = 1000*exp(-magnitude+1)
-    (length,width) = np.shape(background)
     for u in range(x-ROI,x+ROI+1):
-        for v in range(y-ROI,x+ROI+1):
+        for v in range(y-ROI,y+ROI+1):
             print(u,v)
             dist = ((u-x)**2)+((v-y)**2)
             diff = (dist)/2
             exponent_exp = 1/(exp(diff))
-            raw_intensity = (H/(2*pi))*exponent_exp
+            raw_intensity = int(round((H/(2*pi))*exponent_exp))
             background[v,u] = raw_intensity
 
     return background
@@ -152,6 +151,7 @@ xpixel = l/xtot
 ypixel = w/ytot
 
 magnitude_mv = list(stars_within_FOV['Magnitude'])
+filtered_magnitude = []
 
 pixel_coordinates = []
 print("*"*100)
@@ -166,17 +166,17 @@ for i,(x1,y1) in enumerate(star_loc):
         delete_indices.append(i)
         continue
     pixel_coordinates.append((x1pixel,y1pixel))
+    filtered_magnitude.append(magnitude_mv[i])
     print("X: {}".format(x1pixel))
     print("Y: {}".format(y1pixel))
 
-for index in delete_indices:
-    print(index)
-    del magnitude_mv[index]
-
 background = np.zeros((w,l))
 
-for i in range(len(magnitude_mv)):
+for i in range(len(filtered_magnitude)):
     x = round(l/2 + pixel_coordinates[i][0])
     y = round(w/2 - pixel_coordinates[i][1])
-    print("Drawing star {0} of {1}".format(i+1,len(magnitude_mv)))
-    print("Location:\n X:{0}, Y:{1}".format(x,y))
+    print("Drawing star {0} of {1}".format(i+1,len(filtered_magnitude)))
+    print("Location:\n X:{0}, Y:{1}\nMagnitude: {2}".format(x,y,filtered_magnitude[i]))
+    background = draw_star(x,y,filtered_magnitude[i],background)
+
+displayImg(background,cmap='gray')
