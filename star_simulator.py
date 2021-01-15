@@ -78,7 +78,6 @@ def draw_star(x,y,magnitude,gaussian,background,ROI=5):
         radius = int(round((mag/9)*(4)+2))
         color = int(round((mag/9)*(155)+100))
         cv2.circle(background,(x,y),radius,color,thickness=-1)
-        # cv2.circle(background,(x,y),2,255,thickness=-1)
     return background
 
 def add_noise(low,high,background):
@@ -191,8 +190,7 @@ for coord in star_sensor_coordinates:
     x = f*(coord[0]/coord[2])
     y = f*(coord[1]/coord[2])
     star_loc.append((x,y))
-    print("X: {}".format(x))
-    print("Y: {}".format(y))
+    print("X: {}\tY: {}".format(x,y))
 
 xtot = 2*tan(radians(FOVx)/2)*f
 ytot = 2*tan(radians(FOVy)/2)*f
@@ -217,8 +215,7 @@ for i,(x1,y1) in enumerate(star_loc):
         continue
     pixel_coordinates.append((x1pixel,y1pixel))
     filtered_magnitude.append(magnitude_mv[i])
-    print("X: {}".format(x1pixel))
-    print("Y: {}".format(y1pixel))
+    print("X: {}\tY: {}".format(x1pixel,y1pixel))
 
 background = np.zeros((w,l))
 print("*"*60)
@@ -227,7 +224,7 @@ for i in range(len(filtered_magnitude)):
     x = round(l/2 + pixel_coordinates[i][0])
     y = round(w/2 - pixel_coordinates[i][1])
     print(f"Drawing star {i+1} of {len(filtered_magnitude)}...")
-    print(f"X: {x}\nY: {y}")
+    print(f"X: {x}\tY: {y}")
     print(f"Magnitude: {filtered_magnitude[i]}")
     print("*"*40)
     background = draw_star(x,y,filtered_magnitude[i],False,background)
