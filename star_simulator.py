@@ -81,8 +81,15 @@ def draw_star(x,y,magnitude,gaussian,background,ROI=5):
         # cv2.circle(background,(x,y),2,255,thickness=-1)
     return background
 
-    def add_noise(low,high):
-        pass
+def add_noise(low,high,background):
+    """[Adds noise to an image]
+
+    Args:
+        low ([int]): [lower threshold of the noise generated]
+        high ([int]): [maximum pixel value of the noise generated]
+        background ([numpy array]): [the image that is put noise on]
+    """
+    pass
 
 
 def displayImg(img,cmap=None):
