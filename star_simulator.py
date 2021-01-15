@@ -89,7 +89,11 @@ def add_noise(low,high,background):
         high ([int]): [maximum pixel value of the noise generated]
         background ([numpy array]): [the image that is put noise on]
     """
-    pass
+    row,col = np.shape(background)
+    background = background.astype(int)
+    noise = np.random.randint(low,high=high,size=(row,col))
+    noised_img = cv2.addWeighted(noise,0.1,background,0.9,0)
+    return noised_img
 
 
 def displayImg(img,cmap=None):
@@ -227,6 +231,9 @@ for i in range(len(filtered_magnitude)):
     print(f"Magnitude: {filtered_magnitude[i]}")
     print("*"*40)
     background = draw_star(x,y,filtered_magnitude[i],False,background)
+
+#Adding noise
+background = add_noise(0,50,background=background)
 
 displayImg(background,cmap='gray')
 
