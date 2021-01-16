@@ -6,12 +6,28 @@ de = float(input("Input declination:\n"))
 roll = float(input("Input roll:\n"))
 
 #Angular rate prompt
-direction_sensor = input("Input direction:\n(X for +RA)\n(Y for +DE)\n(R for +ROLL)\n")
-omega = float(input("Input angular rate: "))
+direction_sensor = input("Input direction:\n(X for +X)\n(Y for +Y)\n(R for +ROLL)\n")
+omega = float(input("Input angular rate in degrees: "))
 
 #Frames per second
 fps = 30
+duration = int(input("Enter the duration of the video in seconds:\n"))
+
+#Creating images
+images = []
+if direction_sensor.lower() == "x":
+    angle_increment = omega/fps
+    total_frames = fps*duration
+    ra_list = [ra]
+    for i in range(total_frames):
+        ra_append = round(ra_list[-1] + angle_increment,3)
+        ra_list.append(ra_append)
+    
+    for ra_step in ra_list:
+        images.append(nf.create_star_image(ra_step,de,roll))
 
 
-img = nf.create_star_image(ra,de,roll)
-nf.displayImg(img)
+elif direction_sensor.lower() == "y":
+    pass
+elif direction_sensor.lower() == "z":
+    pass
