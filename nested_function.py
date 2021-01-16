@@ -137,6 +137,7 @@ def create_star_image(ra,de,roll):
 
     #STEP 1: CONVERSION OF CELESTIAL COORDINATE SYSTEM TO STAR SENSOR COORDINATE SYSTEM
     M = create_M_matrix(ra,de,roll)
+    M_transpose = np.round(np.matrix.transpose(M),decimals=5)
 
     #Search for image-able stars
     col_list = ["Star ID","RA","DE","Magnitude"]
