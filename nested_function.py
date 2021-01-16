@@ -4,6 +4,18 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import cv2
 
+def displayImg(img,cmap='gray'):
+    """[Displays image]
+
+    Args:
+        img ([numpy array]): [the pixel values in the form of numpy array]
+        cmap ([string], optional): [can be 'gray']. Defaults to None.
+    """
+    fig = plt.figure(figsize=(12,10))
+    ax = fig.add_subplot(111)
+    ax.imshow(img,cmap)
+    plt.show()
+
 def create_star_image(ra,de,roll):
     """[summary]
 
@@ -103,19 +115,6 @@ def create_star_image(ra,de,roll):
         return noised_img
 
 
-    def displayImg(img,cmap=None):
-        """[Displays image]
-
-        Args:
-            img ([numpy array]): [the pixel values in the form of numpy array]
-            cmap ([string], optional): [can be 'gray']. Defaults to None.
-        """
-        fig = plt.figure(figsize=(12,10))
-        ax = fig.add_subplot(111)
-        ax.imshow(img,cmap)
-        plt.show()
-
-
     #Right ascension, declination and roll
     ra = radians(float(ra))
     de = radians(float(de))
@@ -190,7 +189,6 @@ def create_star_image(ra,de,roll):
             continue
         pixel_coordinates.append((x1pixel,y1pixel))
         filtered_magnitude.append(magnitude_mv[i])
-        print("X: {}\tY: {}".format(x1pixel,y1pixel))
 
     background = np.zeros((w,l))
 
