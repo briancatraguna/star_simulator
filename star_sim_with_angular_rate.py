@@ -15,9 +15,9 @@ duration = int(input("Enter the duration of the video in seconds:\n"))
 
 #Creating images
 images = []
+angle_increment = omega/fps
+total_frames = fps*duration
 if direction_sensor.lower() == "x":
-    angle_increment = omega/fps
-    total_frames = fps*duration
     ra_list = [ra]
     for i in range(total_frames):
         ra_append = round(ra_list[-1] + angle_increment,3)
@@ -26,8 +26,14 @@ if direction_sensor.lower() == "x":
     for ra_step in ra_list:
         images.append(nf.create_star_image(ra_step,de,roll))
 
-
 elif direction_sensor.lower() == "y":
-    pass
+    de_list = [de]
+    for i in range(total_frames):
+        de_append = round(de_list[-1] + angle_increment,3)
+        de_list.append(de_append)
+    
+    for de_step in de_list:
+        images.append(nf.create_star_image(ra,de_step,roll))
+
 elif direction_sensor.lower() == "z":
     pass
