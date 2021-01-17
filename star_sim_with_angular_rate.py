@@ -36,4 +36,11 @@ elif direction_sensor.lower() == "y":
         images.append(nf.create_star_image(ra,de_step,roll))
 
 elif direction_sensor.lower() == "z":
-    pass
+    roll_list = [roll]
+    for i in range(total_frames):
+        roll_append = round(roll_list[-1] + angle_increment,3)
+        roll_list.append(roll_append)
+    
+    for roll_step in roll_list:
+        images.append(nf.create_star_image(ra,de,roll_step))
+    
