@@ -2,12 +2,14 @@ import nested_function as nf
 import cv2
 
 #User defines the initial attitude
-ra = float(input("Input right ascension:\n"))
-de = float(input("Input declination:\n"))
-roll = float(input("Input roll:\n"))
+ra = float(input("Input initial right ascension:\n"))
+de = float(input("Input initial declination:\n"))
+roll = float(input("Input initial roll:\n"))
 
 #Angular rate prompt
-direction_sensor = input("Input direction:\n(X for +X)\n(Y for +Y)\n(R for +ROLL)\n")
+print("Input direction:")
+print("1.+X\n2.-X\n3.+Y\n4.-Y\n5.+Z\n6.-Z")
+direction_sensor = input()
 omega = float(input("Input angular rate in degrees: "))
 
 #Frames per second
@@ -46,7 +48,7 @@ elif direction_sensor.lower() == "z":
         images.append(nf.create_star_image(ra,de,roll_step))
 
 width,height = images[0].shape
-out = cv2.VideoWriter('project.mp4',cv2.VideoWriter_fourcc(*'mp4v'), fps, (height,width),False)
+out = cv2.VideoWriter('sample_tracking_videos/project.avi',cv2.VideoWriter_fourcc(*'DIVX'), fps, (height,width),False)
 
 for i in range(len(images)):
     out.write(images[i])
