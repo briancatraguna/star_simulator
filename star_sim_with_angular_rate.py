@@ -8,7 +8,7 @@ roll = float(input("Input initial roll:\n"))
 
 #Angular rate prompt
 print("Input direction:")
-print("1. +X\n2. -X\n3. +Y\n4. -Y\n5. +Z\n6. -Z")
+print("1. For updating RA\n2. For updating DE \n3. For updating ROLL")
 direction_sensor = input()
 omega = float(input("Input angular rate in degrees: "))
 
@@ -20,10 +20,8 @@ duration = 30
 images = []
 angle_increment = omega/fps
 total_frames = int(fps*duration)
-if direction_sensor.lower()[-1] == "x" or direction_sensor == "1" or direction_sensor == "2":
+if direction_sensor == "1":
     ra_list = [ra]
-    if direction_sensor[0] == "-" or direction_sensor == "2":
-        angle_increment = - angle_increment
     for i in range(total_frames):
         ra_append = round(ra_list[-1] + angle_increment,3)
         ra_list.append(ra_append)
@@ -31,7 +29,7 @@ if direction_sensor.lower()[-1] == "x" or direction_sensor == "1" or direction_s
     for ra_step in ra_list:
         images.append(nf.create_star_image(ra_step,de,roll))
 
-elif direction_sensor.lower() == "y":
+elif direction_sensor == "2":
     de_list = [de]
     for i in range(total_frames):
         de_append = round(de_list[-1] + angle_increment,3)
@@ -40,7 +38,7 @@ elif direction_sensor.lower() == "y":
     for de_step in de_list:
         images.append(nf.create_star_image(ra,de_step,roll))
 
-elif direction_sensor.lower() == "z":
+elif direction_sensor == "3":
     roll_list = [roll]
     for i in range(total_frames):
         roll_append = round(roll_list[-1] + angle_increment,3)
