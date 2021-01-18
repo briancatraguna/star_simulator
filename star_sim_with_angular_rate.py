@@ -8,20 +8,22 @@ roll = float(input("Input initial roll:\n"))
 
 #Angular rate prompt
 print("Input direction:")
-print("1.+X\n2.-X\n3.+Y\n4.-Y\n5.+Z\n6.-Z")
+print("1. +X\n2. -X\n3. +Y\n4. -Y\n5. +Z\n6. -Z")
 direction_sensor = input()
 omega = float(input("Input angular rate in degrees: "))
 
-#Frames per second
-fps = 30.0
-duration = int(input("Enter the duration of the video in seconds:\n"))
+#Frames per second and duration default values
+fps = 15.0
+duration = 30
 
 #Creating images
 images = []
 angle_increment = omega/fps
 total_frames = int(fps*duration)
-if direction_sensor.lower() == "x":
+if direction_sensor.lower()[-1] == "x" or direction_sensor == "1" or direction_sensor == "2":
     ra_list = [ra]
+    if direction_sensor[0] == "-" or direction_sensor == "2":
+        angle_increment = - angle_increment
     for i in range(total_frames):
         ra_append = round(ra_list[-1] + angle_increment,3)
         ra_list.append(ra_append)
