@@ -157,7 +157,7 @@ else:
 #Search for image-able stars
 print("Reading in CSV file...\n")
 col_list = ["Star ID","RA","DE","Magnitude"]
-star_catalogue = pd.read_csv('Below_6.0_SAO.csv',usecols=col_list)
+star_catalogue = pd.read_csv('filtered_catalogue/Below_6.0_SAO.csv',usecols=col_list)
 R = (sqrt((radians(FOVx)**2)+(radians(FOVy)**2))/2)
 alpha_start = (ra - (R/cos(de)))
 alpha_end = (ra + (R/cos(de)))
@@ -192,10 +192,7 @@ for coord in star_sensor_coordinates:
     star_loc.append((x,y))
     print("X: {}\tY: {}".format(x,y))
 
-xtot = 2*tan(radians(FOVx)/2)*f
-ytot = 2*tan(radians(FOVy)/2)*f
-xpixel = l/xtot
-ypixel = w/ytot
+pixel_per_length = 1/myu
 
 magnitude_mv = list(stars_within_FOV['Magnitude'])
 filtered_magnitude = []
@@ -208,8 +205,8 @@ delete_indices = []
 for i,(x1,y1) in enumerate(star_loc):
     x1 = float(x1)
     y1 = float(y1)
-    x1pixel = round(xpixel*x1)
-    y1pixel = round(ypixel*y1)
+    x1pixel = round(pixel_per_length*x1)
+    y1pixel = round(pixel_per_length*y1)
     if abs(x1pixel) > l/2 or abs(y1pixel) > w/2:
         delete_indices.append(i)
         continue
