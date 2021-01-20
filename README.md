@@ -7,17 +7,15 @@ Development of star simulator software for star sensor research during my intern
 It's basically a planetarium software but only shows stars. This software can be used for star sensor algorithms research for satellite attitude determination system.
 
 ## Description :blue_book:
-In this repository, the main file that generates the star image is ```star_simulator.py```. Other files include:
+In this repository, the main file that generates the star image is ```star_simulator.py```. When running the main file, the star image will be automatically saved under the directory ```sample_images``` with ```.jpg``` extension. Other files include:
 1. ```SAO.xlsx```
 <br>This file contains the complete star catalogue from the Smithsonian Astrophysical Observatory.
 2. ```star_filtering.py```
-<br>This script is for generating CSV files to create filtered star catalogue that contains stars only in a specified magnitude range.
-3. ```Below_6.0_SAO.csv```
-<br>This is the CSV file that is used as the star catalogue reference in the star simulator program. This file is generated after running ```star_filtering.py```.
-4. ```nested_function.py```
+<br>This script is for generating CSV files to create filtered star catalogue that contains stars only in a specified magnitude range and will be saved under the directory ```filtered_catalogue/```
+3. ```nested_function.py```
 <br>This is the script used to minimize the hassle of creating the full code for generating a star image when trying to create each frame for the star tracking video.
-5. ```star_sim_with_angular_rate.py```
-<br>Generates the star tracking video.
+4. ```star_sim_with_angular_rate.py```
+<br>Generates the star tracking video and the video will be automatically saved under the directory ```sample_tracking_videos/``` with ```.avi``` extension.
 
 ## Dependencies
 Before running ```star_simulator.py```, [Python](https://www.python.org/downloads/) must be installed and the following libraries:
