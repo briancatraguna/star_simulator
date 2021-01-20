@@ -140,7 +140,7 @@ def create_star_image(ra,de,roll):
 
     #Search for image-able stars
     col_list = ["Star ID","RA","DE","Magnitude"]
-    star_catalogue = pd.read_csv('Below_6.0_SAO.csv',usecols=col_list)
+    star_catalogue = pd.read_csv('filtered_catalogue/Below_6.0_SAO.csv',usecols=col_list)
     R = (sqrt((radians(FOVx)**2)+(radians(FOVy)**2))/2)
     alpha_start = (ra - (R/cos(de)))
     alpha_end = (ra + (R/cos(de)))

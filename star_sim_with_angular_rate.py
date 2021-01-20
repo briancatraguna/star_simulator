@@ -13,7 +13,7 @@ direction_sensor = input()
 omega = float(input("Input angular rate in degrees: "))
 
 #Frames per second and duration default values
-fps = 15.0
+fps = 10.0
 duration = 30
 
 #Creating images
