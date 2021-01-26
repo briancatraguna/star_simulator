@@ -121,14 +121,14 @@ def create_star_image(ra,de,roll):
     roll = radians(float(roll))
 
     #length/pixel
-    myu = 3*(10**-6)
+    myu = 1.12*(10**-6)
 
     #Focal length prompt from user
-    f = 0.016
+    f = 0.00304
 
     #Star sensor pixel
-    l = 1920
-    w = 1080
+    l = 3280
+    w = 2464
 
     #Star sensor FOV
     FOVy = degrees(2*atan((myu*w/2)/f))

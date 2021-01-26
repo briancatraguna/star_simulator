@@ -118,14 +118,14 @@ de = radians(float(de0))
 roll = radians(float(roll0))
 
 #length/pixel
-myu = 3*(10**-6)
+myu = 1.12*(10**-6)
 
 #Focal length prompt from user
-f = 0.016
+f = 0.00304
 
 #Star sensor pixel
-l = 1920
-w = 1080
+l = 3280
+w = 2464
 print("Resolution length: {}".format(l))
 print("Resolution width: {}".format(w))
 
@@ -233,3 +233,6 @@ displayImg(background,cmap='gray')
 
 file_name = f"ra{ra0}_de{de0}_roll{roll0}.jpg"
 cv2.imwrite("sample_images/"+file_name,background)
+
+print("FOV y: {}".format(FOVy))
+print("FOV x: {}".format(FOVx))
