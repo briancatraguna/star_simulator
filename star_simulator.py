@@ -231,8 +231,5 @@ background = add_noise(0,50,background=background)
 
 displayImg(background,cmap='gray')
 
-file_name = f"ra{ra0}_de{de0}_roll{roll0}.jpg"
-cv2.imwrite("sample_images/"+file_name,background)
-
-print("FOV y: {}".format(FOVy))
-print("FOV x: {}".format(FOVx))
+# file_name = f"ra{ra0}_de{de0}_roll{roll0}.jpg"
+# cv2.imwrite("sample_images/"+file_name,background)
