@@ -14,8 +14,10 @@ In this repository, the main file that generates the star image is ```star_simul
 <br>This script is for generating CSV files to create filtered star catalogue that contains stars only in a specified magnitude range and will be saved under the directory ```filtered_catalogue/```
 3. ```nested_function.py```
 <br>This is the script used to minimize the hassle of creating the full code for generating a star image when trying to create each frame for the star tracking video.
-4. ```star_sim_with_angular_rate.py```
+4. ```star_sim_with_angular_rate.py```.
 <br>Generates the star tracking video and the video will be automatically saved under the directory ```sample_tracking_videos/``` with ```.avi``` extension.
+5. ```gui_root.py```
+<br>The graphical user interface for the simulator that I'm currently developing.
 
 ## Dependencies
 Before running ```star_simulator.py```, [Python](https://www.python.org/downloads/) must be installed and the following libraries:
