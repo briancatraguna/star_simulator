@@ -25,7 +25,7 @@ mainWindow.columnconfigure(0,weight=1)
 
 #INPUT FRAME
 inputframe = Frame(mainWindow,width=1000)
-inputframe.grid(row=1,column=0,sticky='n')
+inputframe.grid(row=1,column=0,sticky='nsew')
 inputframe.config(relief='sunken',borderwidth=3)
 
 #Attitude Sub - Frame
@@ -67,15 +67,15 @@ generate_button.grid(row=0,column=2)
 
 #OUTPUT FRAME
 outputframe = Frame(mainWindow,width=1000)
-outputframe.grid(row=2,column=0,sticky='n')
+outputframe.grid(row=2,column=0,sticky='nsew')
 outputframe.config(relief='sunken',borderwidth=3)
 
 #Creating Canvas for Showing Image
-canvas = Canvas(outputframe,width=820,height=616)
-canvas.grid(row=0,column=0)
+canvas = Canvas(outputframe,width=850,height=700)
+canvas.grid(row=0,column=0,sticky='nsew')
 
 my_image = cv2.imread("ra0_de0_roll0.jpg")
-my_image = rescale_image(my_image)
+my_image = rescale_image(my_image,25)
 img =  ImageTk.PhotoImage(image=Image.fromarray(my_image))
 canvas.create_image(20,20,anchor=NW,image=img)
 
