@@ -12,7 +12,7 @@ def rescale_image(image,percentage=25):
     scale_percent = percentage
     width = int(image.shape[1] * scale_percent/100)
     height = int(image.shape[0] * scale_percent/100)
-    dsize = (width/height)
+    dsize = (width,height)
     output = cv2.resize(image,dsize)
     return output
 
@@ -75,6 +75,7 @@ canvas = Canvas(outputframe,width=820,height=616)
 canvas.grid(row=0,column=0)
 
 my_image = cv2.imread("ra0_de0_roll0.jpg")
+my_image = rescale_image(my_image)
 img =  ImageTk.PhotoImage(image=Image.fromarray(my_image))
 canvas.create_image(20,20,anchor=NW,image=img)
 
