@@ -1,17 +1,17 @@
 from tkinter import *
+from PIL import ImageTk,Image
 
 mainWindow = Tk()
 mainWindow.title("Star Simulator")
-mainWindow.geometry("1000x750+8+8")
+mainWindow.geometry("1000x780+8+8")
 Label(mainWindow,text="Created by Author").grid(row=0,column=0)
 
 mainWindow.columnconfigure(0,weight=1)
-mainWindow.columnconfigure(1,weight=5)
 
 #INPUT FRAME
-inputframe = Frame(mainWindow)
+inputframe = Frame(mainWindow,width=1000)
 inputframe.grid(row=1,column=0,sticky='n')
-inputframe.config(relief='sunken',borderwidth=2)
+inputframe.config(relief='sunken',borderwidth=3)
 
 #Attitude Sub - Frame
 attitudeframe = LabelFrame(inputframe,text="Attitude")
@@ -55,5 +55,21 @@ res_h_label = Label(settingsframe,text="Vertical Resolution (pixels): ")
 res_h_label.grid(row=3,column=0)
 res_h = Entry(settingsframe)
 res_h.grid(row=3,column=1)
+
+#Generate Star Image Button
+generate_button = Button(inputframe,text="Generate Star Image!")
+generate_button.grid(row=0,column=2)
+
+#OUTPUT FRAME
+outputframe = Frame(mainWindow,width=1000)
+outputframe.grid(row=2,column=0,sticky='n')
+outputframe.config(relief='sunken',borderwidth=3)
+
+#Creating Canvas for Showing Image
+canvas = Canvas(outputframe,width=820,height=616)
+canvas.grid(row=0,column=0)
+
+img = ImageTk.PhotoImage(file="ra0_de0_roll0.jpg")
+canvas.create_image(20,20,anchor=NW,image=img)
 
 mainWindow.mainloop()

@@ -231,5 +231,6 @@ background = add_noise(0,50,background=background)
 
 displayImg(background,cmap='gray')
 
-# file_name = f"ra{ra0}_de{de0}_roll{roll0}.jpg"
+file_name = f"ra{ra0}_de{de0}_roll{roll0}.jpg"
 # cv2.imwrite("sample_images/"+file_name,background)
+cv2.imwrite(file_name,background)
