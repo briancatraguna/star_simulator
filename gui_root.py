@@ -1,5 +1,20 @@
 from tkinter import *
 from PIL import ImageTk,Image
+import cv2
+import nested_function as nf
+
+def rescale_image(image,percentage=25):
+    """[resizes image]
+
+    Args:
+        image ([numpy array]): [image to be rescaled]
+    """
+    scale_percent = percentage
+    width = int(image.shape[1] * scale_percent/100)
+    height = int(image.shape[0] * scale_percent/100)
+    dsize = (width/height)
+    output = cv2.resize(image,dsize)
+    return output
 
 mainWindow = Tk()
 mainWindow.title("Star Simulator")
@@ -46,16 +61,6 @@ miu_label.grid(row=1,column=0)
 miu = Entry(settingsframe)
 miu.grid(row=1,column=1)
 
-res_l_label = Label(settingsframe,text="Horizontal Resolution (pixels): ")
-res_l_label.grid(row=2,column=0)
-res = Entry(settingsframe)
-res.grid(row=2,column=1)
-
-res_h_label = Label(settingsframe,text="Vertical Resolution (pixels): ")
-res_h_label.grid(row=3,column=0)
-res_h = Entry(settingsframe)
-res_h.grid(row=3,column=1)
-
 #Generate Star Image Button
 generate_button = Button(inputframe,text="Generate Star Image!")
 generate_button.grid(row=0,column=2)
@@ -69,7 +74,8 @@ outputframe.config(relief='sunken',borderwidth=3)
 canvas = Canvas(outputframe,width=820,height=616)
 canvas.grid(row=0,column=0)
 
-img = ImageTk.PhotoImage(file="ra0_de0_roll0.jpg")
+my_image = cv2.imread("ra0_de0_roll0.jpg")
+img =  ImageTk.PhotoImage(image=Image.fromarray(my_image))
 canvas.create_image(20,20,anchor=NW,image=img)
 
 mainWindow.mainloop()
