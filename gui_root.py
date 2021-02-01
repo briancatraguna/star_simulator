@@ -2,6 +2,7 @@ from tkinter import *
 from PIL import ImageTk,Image
 import cv2
 import nested_function as nf
+from functools import partial
 
 def rescale_image(image,percentage=25):
     """[resizes image]
@@ -9,32 +10,34 @@ def rescale_image(image,percentage=25):
     Args:
         image ([numpy array]): [image to be rescaled]
     """
-    scale_percent = percentage
-    width = int(image.shape[1] * scale_percent/100)
-    height = int(image.shape[0] * scale_percent/100)
+    width = int(image.shape[1] * percentage/100)
+    height = int(image.shape[0] * percentage/100)
     dsize = (width,height)
     output = cv2.resize(image,dsize)
     return output
 
 
-def create_star_image(ra,de,roll,f,myu):
+def create_star_image_after_button_pressed(ra,de,roll,f,myu):
     """[create star image command when button is pressed]
 
     Args:
         ra ([int]): [right ascension from the spinner]
         de ([int]): [declination from the spinner]
         roll ([int]): [roll from the spinner]
-        f ([float]): [focal length from the entry]
-        myu ([float]): [length per pixel from the entry]
+        f ([float]): [focal length from the entry in mm]
+        myu ([float]): [length per pixel from the entry in nm]
     """
     ra_calc = (ra.get())
     de_calc = (de.get())
     roll_calc = (roll.get())
-    f_calc = float((f.get()))
-    myu_calc = float((myu.get()))
+    f_calc = float((f.get()))/1000
+    myu_calc = float((myu.get()))*(10**-6)
+    print(ra_calc,de_calc,roll_calc,f_calc,myu_calc)
     star_image = nf.create_star_image(ra_calc,de_calc,roll_calc,f_calc,myu_calc)
-
-
+    rescaled_image = rescale_image(star_image,25)
+    tkinter_image = ImageTk.PhotoImage(image=Image.fromarray(rescaled_image))
+    canvas.create_image(20,20,anchor=NW,image=tkinter_image)
+    return
 
 mainWindow = Tk()
 mainWindow.title("Star Simulator")
@@ -91,7 +94,8 @@ miu = Entry(settingsframe,textvariable=myu)
 miu.grid(row=1,column=1)
 
 #Generate Star Image Button
-generate_button = Button(inputframe,text="Generate Star Image!")
+create_star_image_after_button_pressed = partial(create_star_image_after_button_pressed,ra,de,roll,f,myu)
+generate_button = Button(inputframe,text="Generate Star Image!",command=create_star_image_after_button_pressed)
 generate_button.grid(row=0,column=2)
 
 #OUTPUT FRAME
@@ -103,9 +107,9 @@ outputframe.config(relief='ridge',borderwidth=3)
 canvas = Canvas(outputframe,width=850,height=700)
 canvas.grid(row=0,column=0,sticky='nsew')
 
-my_image = cv2.imread("ra0_de0_roll0.jpg")
-my_image = rescale_image(my_image,25)
-img =  ImageTk.PhotoImage(image=Image.fromarray(my_image))
-canvas.create_image(20,20,anchor=NW,image=img)
+# my_image = cv2.imread("ra0_de0_roll0.jpg")
+# my_image = rescale_image(my_image,25)
+# img =  ImageTk.PhotoImage(image=Image.fromarray(my_image))
+# canvas.create_image(20,20,anchor=NW,image=img)
 
 mainWindow.mainloop()
