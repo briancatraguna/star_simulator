@@ -16,7 +16,7 @@ def displayImg(img,cmap='gray'):
     ax.imshow(img,cmap)
     plt.show()
 
-def create_star_image(ra,de,roll):
+def create_star_image(ra,de,roll,f=0.00304,myu=1.12*(10**-6)):
     """[summary]
 
     Args:
@@ -119,12 +119,6 @@ def create_star_image(ra,de,roll):
     ra = radians(float(ra))
     de = radians(float(de))
     roll = radians(float(roll))
-
-    #length/pixel
-    myu = 1.12*(10**-6)
-
-    #Focal length prompt from user
-    f = 0.00304
 
     #Star sensor pixel
     l = 3280

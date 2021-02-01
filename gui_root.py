@@ -27,7 +27,13 @@ def create_star_image(ra,de,roll,f,myu):
         f ([float]): [focal length from the entry]
         myu ([float]): [length per pixel from the entry]
     """
-    pass
+    ra_calc = (ra.get())
+    de_calc = (de.get())
+    roll_calc = (roll.get())
+    f_calc = float((f.get()))
+    myu_calc = float((myu.get()))
+    star_image = nf.create_star_image(ra_calc,de_calc,roll_calc,f_calc,myu_calc)
+
 
 
 mainWindow = Tk()
