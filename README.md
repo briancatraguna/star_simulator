@@ -1,10 +1,10 @@
 # Star Simulator Software Development :star:
-Development of star simulator software for star sensor research during my internship in the National Institute of Aeronautics and Space (Lembaga Penerbangan dan Antariksa Nasional). This software will generate star image or video by the user by first providing three inputs which are:
+Development of star simulator software for star sensor research during my internship at the National Institute of Aeronautics and Space (Lembaga Penerbangan dan Antariksa Nasional). This software will generate star image or video by the user by first providing three inputs which are:
 1. Right ascension (α)
 2. Declination (δ)
 3. Roll (ψ)
 
-It's basically a planetarium software but only shows stars. This software can be used for star sensor algorithms research for satellite attitude determination system.
+It's basically a planetarium software but only shows stars. This software can be used for star pattern recognition system validation.
 
 ## Description :blue_book:
 In this repository, the main file that generates the star image is ```star_simulator.py```. When running the main file, the star image will be automatically saved under the directory ```sample_images/``` with ```.jpg``` extension. Other files include:
@@ -17,7 +17,7 @@ In this repository, the main file that generates the star image is ```star_simul
 4. ```star_sim_with_angular_rate.py```.
 <br>Generates the star tracking video and the video will be automatically saved under the directory ```sample_tracking_videos/``` with ```.avi``` extension.
 5. ```gui_root.py```
-<br>The graphical user interface for the simulator that I'm currently developing.
+<br>Run this to get a more user friendly interface. This is the graphical user interface based star simulator.
 
 ## Dependencies
 Before running ```star_simulator.py```, [Python](https://www.python.org/downloads/) must be installed and the following libraries:
