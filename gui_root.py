@@ -101,9 +101,4 @@ create_star_image_after_button_pressed = partial(create_star_image_after_button_
 generate_button = Button(inputframe,text="Generate Star Image!",command=create_star_image_after_button_pressed)
 generate_button.grid(row=0,column=2)
 
-# my_image = cv2.imread("ra0_de0_roll0.jpg")
-# my_image = rescale_image(my_image,25)
-# img =  ImageTk.PhotoImage(image=Image.fromarray(my_image))
-# canvas.create_image(20,20,anchor=NW,image=img)
-
 mainWindow.mainloop()
