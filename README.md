@@ -21,21 +21,25 @@ In this repository, the main file that generates the star image is ```star_simul
 
 ## Dependencies
 Before running ```star_simulator.py```, [Python](https://www.python.org/downloads/) must be installed and the following libraries:
-* Numpy
+* [Numpy](https://numpy.org/doc/stable/)
 ```bash
 pip install numpy
 ```
-* Pandas
+* [Pandas](https://pandas.pydata.org/docs/)
 ```bash
 pip install pandas
 ```
-* Matplotlib
+* [Matplotlib](https://matplotlib.org/3.3.3/contents.html)
 ```bash
 pip install matplotlib
 ```
-* OpenCV
+* [OpenCV](https://docs.opencv.org/master/)
 ```bash
 pip install cv2-python
+```
+* [Tkinter](https://docs.python.org/3/library/tk.html)
+```bash
+pip install tkinter
 ```
 
 That's it, and enjoy! Any feedbacks would be very much appreciated!
