@@ -57,6 +57,10 @@ roll = IntVar()
 f = StringVar()
 myu = StringVar()
 
+#Setting default values
+f.set(3.04)
+myu.set(1.12)
+
 ra_input_label = Label(attitudeframe,text="Right Ascension α (degrees): ")
 ra_input_label.grid(row=0,column=0)
 ra_input = Spinbox(attitudeframe,width=10,values=tuple(range(-180,180)),textvariable=ra)
