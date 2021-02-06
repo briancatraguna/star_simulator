@@ -35,19 +35,22 @@ def create_star_image_after_button_pressed(ra,de,roll,f,myu,canvas):
 mainWindow = Tk()
 mainWindow.title("Star Simulator")
 mainWindow.geometry("1000x780+8+8")
-mainWindow.configure(bg='gray')
-created_label = Label(mainWindow,text="Created by Brian Mohammed Catraguna, Flight Physics Laboratory, Faculty of Mechanical and Aerospace Engineering, Bandung Institue of Technology")
-created_label.grid(row=0,column=0,sticky='nsew',columnspan=3)
+mainWindow.configure(bg='skyblue')
+
+created_label = Label(mainWindow,bg='steelblue',text="Created by Brian Mohammed Catraguna, Flight Physics Laboratory, Faculty of Mechanical and Aerospace Engineering, Bandung Institue of Technology")
+created_label.grid(row=2,column=0,sticky='nsew',columnspan=3)
+created_label.config(font=("Courier", 7))
 
 mainWindow.columnconfigure(0,weight=1)
 
 #INPUT FRAME
 inputframe = Frame(mainWindow,width=1000)
-inputframe.grid(row=1,column=0,sticky='n')
+inputframe.grid(row=0,column=0,sticky='n')
 inputframe.config(relief='sunken',borderwidth=3)
 
 #Attitude Sub - Frame
 attitudeframe = LabelFrame(inputframe,text="Attitude")
+attitudeframe.config(font=("system",9))
 attitudeframe.grid(row=0,column=0)
 
 ra = IntVar()
@@ -81,6 +84,7 @@ settingsframe = LabelFrame(inputframe,text="Sensor Settings")
 settingsframe.grid(row=0,column=1)
 
 focal_length_label = Label(settingsframe,text="Focal Length f (mm): ")
+focal_length_label.config(font=("arial",9))
 focal_length_label.grid(row=0,column=0)
 focal_length = Entry(settingsframe,textvariable=f)
 focal_length.grid(row=0,column=1)
@@ -93,11 +97,11 @@ miu.grid(row=1,column=1)
 
 #OUTPUT FRAME
 outputframe = Frame(mainWindow,width=1000)
-outputframe.grid(row=2,column=0,sticky='s')
+outputframe.grid(row=1,column=0,sticky='s')
 outputframe.config(relief='ridge',borderwidth=3)
 
 #Creating Canvas for Showing Image
-canvas = Canvas(outputframe,width=850,height=700)
+canvas = Canvas(outputframe,width=850,height=664)
 canvas.grid(row=0,column=0,sticky='nsew')
 
 #Generate Star Image Button
