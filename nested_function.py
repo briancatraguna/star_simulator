@@ -95,7 +95,7 @@ def create_star_image(ra,de,roll,f=0.00304,myu=1.12*(10**-6)):
                     background[v,u] = raw_intensity
         else:
             mag = abs(magnitude-7) #1 until 9
-            radius = int(round((mag/9)*(5)+2))
+            radius = int(round((mag/9)*(5)+3))
             color = int(round((mag/9)*(155)+100))
             cv2.circle(background,(x,y),radius,color,thickness=-1)
         return background
