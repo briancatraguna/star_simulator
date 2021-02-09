@@ -45,4 +45,31 @@ data = pd.DataFrame(
     data,
     columns=['Star ID','RA','DE','Sensor Coor','Image Coor'])
 
-print(data)
+error_calculation = {
+    'Star ID'   :[],
+    'Ideal Distance 1':[],
+    'Distance After Image 1':[],
+    'Error 1':[],
+    'Ideal Distance 2':[],
+    'Distance After Image 2':[],
+    'Error 2':[],
+    'Ideal Distance 3':[],
+    'Distance After Image 3':[],
+    'Error 3':[],
+}
+
+from math import asin
+star_ID_list = list(data['Star ID'])
+sensor_coord_list = list(data['Sensor Coor'])
+for coordinate1 in sensor_coord_list:
+    x1 = coordinate1[0]
+    y1 = coordinate1[1]
+    z1 = coordinate1[2]
+    for i,coordinate2 in enumerate(sensor_coord_list):
+        x2 = coordinate2[0]
+        y2 = coordinate2[1]
+        z2 = coordinate2[2]
+        resultant = abs((x1-x2)**2+(y1-y2)**2+(z1-z2)**2)/2
+        angular_distance = 2*asin(resultant)
+        if i==2:
+            break
