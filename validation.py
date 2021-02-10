@@ -60,7 +60,6 @@ error_calculation = {
 }
 
 from math import acos,sqrt
-print(acos(1))
 image_coor_list = list(data['Image Coor'])
 for coordinate1 in image_coor_list:
     x,y = coordinate1
@@ -104,10 +103,32 @@ for i,coordinate1 in enumerate(sensor_coord_list):
             break
 
 
+
+ideal_distance_list_1 = error_calculation['Ideal Distance 1']
+ideal_distance_list_2 = error_calculation['Ideal Distance 2']
+ideal_distance_list_3 = error_calculation['Ideal Distance 3']
+image_distance_list_1 = error_calculation['Distance After Image 1']
+image_distance_list_2 = error_calculation['Distance After Image 2']
+image_distance_list_3 = error_calculation['Distance After Image 3']
+for i in range(len(star_ID_list)):
+    index = i
+    print(index)
+    error1 = abs(ideal_distance_list_1[index] - image_distance_list_1[index])
+    error_calculation['Error 1'].append(error1)
+    error2 = abs(ideal_distance_list_2[index] - image_distance_list_2[index])
+    error_calculation['Error 2'].append(error2)
+    error3 = abs(ideal_distance_list_3[index] - image_distance_list_3[index])
+    error_calculation['Error 3'].append(error3)
+
+
+
 print(len(error_calculation['Star ID']))
 print(len(error_calculation['Ideal Distance 1']))
 print(len(error_calculation['Distance After Image 1']))
+print(len(error_calculation['Error 1']))
 print(len(error_calculation['Ideal Distance 2']))
 print(len(error_calculation['Distance After Image 2']))
+print(len(error_calculation['Error 2']))
 print(len(error_calculation['Ideal Distance 3']))
 print(len(error_calculation['Distance After Image 3']))
+print(len(error_calculation['Error 3']))
