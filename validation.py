@@ -9,6 +9,7 @@ height,length = image.shape
 star_id_list = stars_within_FOV['Star ID']
 ra_list = stars_within_FOV['RA']
 de_list = stars_within_FOV['DE']
+f=0.00304
 
 #Create dataframe
 data = {
@@ -58,6 +59,29 @@ error_calculation = {
     'Error 3':[],
 }
 
+from math import acos,sqrt
+print(acos(1))
+image_coor_list = list(data['Image Coor'])
+for coordinate1 in image_coor_list:
+    x,y = coordinate1
+    x1 = float(x)
+    y1 = float(y)
+    for j,coordinate2 in enumerate(image_coor_list):
+        bin_name = 'Distance After Image ' + str(j+1)
+        x2 = float(coordinate2[0])
+        y2 = float(coordinate2[1])
+        numerator = (x1*x2)+(y1*y2)+(f**2)
+        denominator1 = sqrt(x1**2+y1**2+f**2)
+        denominator2 = sqrt(x2**2+y2**2+f**2)
+        denominator = denominator1*denominator2
+        division = numerator/denominator
+        if division>1:
+            division = 1
+        angular_distance = acos(division)
+        error_calculation[bin_name].append(angular_distance)
+        if j == 2:
+            break
+
 from math import asin
 star_ID_list = list(data['Star ID'])
 for id in star_ID_list:
@@ -82,5 +106,8 @@ for i,coordinate1 in enumerate(sensor_coord_list):
 
 print(len(error_calculation['Star ID']))
 print(len(error_calculation['Ideal Distance 1']))
+print(len(error_calculation['Distance After Image 1']))
 print(len(error_calculation['Ideal Distance 2']))
+print(len(error_calculation['Distance After Image 2']))
 print(len(error_calculation['Ideal Distance 3']))
+print(len(error_calculation['Distance After Image 3']))
