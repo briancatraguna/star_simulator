@@ -60,16 +60,27 @@ error_calculation = {
 
 from math import asin
 star_ID_list = list(data['Star ID'])
+for id in star_ID_list:
+    error_calculation['Star ID'].append(id)
 sensor_coord_list = list(data['Sensor Coor'])
-for coordinate1 in sensor_coord_list:
+for i,coordinate1 in enumerate(sensor_coord_list):
+    index = i
     x1 = coordinate1[0]
     y1 = coordinate1[1]
     z1 = coordinate1[2]
-    for i,coordinate2 in enumerate(sensor_coord_list):
+    for j,coordinate2 in enumerate(sensor_coord_list):
+        bin_name = 'Ideal Distance ' + str(j+1)
         x2 = coordinate2[0]
         y2 = coordinate2[1]
         z2 = coordinate2[2]
         resultant = abs((x1-x2)**2+(y1-y2)**2+(z1-z2)**2)/2
         angular_distance = 2*asin(resultant)
-        if i==2:
+        error_calculation[bin_name].append(angular_distance)
+        if j==2:
             break
+
+
+print(len(error_calculation['Star ID']))
+print(len(error_calculation['Ideal Distance 1']))
+print(len(error_calculation['Ideal Distance 2']))
+print(len(error_calculation['Ideal Distance 3']))
