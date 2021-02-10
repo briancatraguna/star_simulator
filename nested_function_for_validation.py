@@ -69,7 +69,7 @@ def create_star_image(ra,de,roll,f=0.00304,myu=1.12*(10**-6)):
         y_dir_vector = (sin(ra)*cos(de))
         z_dir_vector = (sin(de))
         dir_vector_matrix = np.array([[x_dir_vector],[y_dir_vector],[z_dir_vector]])
-        return M_transpose.dot(dir_vector_matrix)
+        return M_transpose.dot(dir_vector_matrix),dir_vector_matrix
 
 
     def draw_star(x,y,magnitude,gaussian,background,ROI=5):
@@ -152,9 +152,11 @@ def create_star_image(ra,de,roll,f=0.00304,myu=1.12*(10**-6)):
     de_i = list(stars_within_FOV['DE'])
     star_id_list = list(stars_within_FOV['Star ID'])
     star_sensor_coordinates = []
+    dir_vectors = []
     for i in range(len(ra_i)):
-        coordinates = dir_vector_to_star_sensor(ra_i[i],de_i[i],M_transpose=M_transpose)
+        coordinates,dir_vectors_xyz = dir_vector_to_star_sensor(ra_i[i],de_i[i],M_transpose=M_transpose)
         star_sensor_coordinates.append(coordinates)
+        dir_vectors.append(dir_vectors_xyz)
 
     #STEP 2: CONVERSION OF STAR SENSOR COORDINATE SYSTEM TO IMAGE COORDINATE SYSTEM
     star_loc = []
@@ -195,4 +197,4 @@ def create_star_image(ra,de,roll,f=0.00304,myu=1.12*(10**-6)):
     #Adding noise
     background = add_noise(0,50,background=background)
 
-    return background,stars_within_FOV,star_id_list,star_sensor_coordinates,star_loc
+    return background,stars_within_FOV,star_id_list,star_sensor_coordinates,star_loc,dir_vectors
