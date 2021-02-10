@@ -10,14 +10,16 @@ star_id_list = stars_within_FOV['Star ID']
 ra_list = stars_within_FOV['RA']
 de_list = stars_within_FOV['DE']
 f=0.00304
+myu=1.12*(10**-6)
 
 #Create dataframe
 data = {
     'Star ID'       :[],
     'RA'            :[],
     'DE'            :[],
-    'Dir Vector'   :[],
-    'Image Coor'    :[]
+    'Dir Vector'    :[],
+    'Image Coor'    :[],
+    'Pixel Coor'    :[]
 }
 
 #get index of unphotographed star images
@@ -33,6 +35,7 @@ for i,(x,y) in enumerate(star_loc):
         continue
     else:
         indexes.append(i)
+        data['Pixel Coor'].append((x_pixel,y_pixel))
 
 #Append the star id with the indexes obtained
 for index in indexes:
@@ -44,7 +47,36 @@ for index in indexes:
 
 data = pd.DataFrame(
     data,
-    columns=['Star ID','RA','DE','Dir Vector','Image Coor'])
+    columns=['Star ID','RA','DE','Dir Vector','Image Coor','Pixel Coor'])
+
+
+#Calculate distance to center (REAL)
+# from math import sqrt,atan,degrees
+# ra_list = list(data['RA'])
+# de_list = list(data['RA'])
+# dist_to_center_real = []
+# for i in range(len(ra_list)):
+#     right_ascension = ra_list[i]
+#     declination = de_list[i]
+#     dist_to_center = sqrt((right_ascension**2)+(declination**2))
+#     dist_to_center_real.append(dist_to_center)
+
+# #Calculate distance to center (After Image)
+# pixel_coord = list(data['Pixel Coor'])
+# dist_to_center_after = []
+# for coor in pixel_coord:
+#     x,y = coor
+#     resultant_pixel = sqrt((x**2)+(y**2))
+#     length = resultant_pixel*myu
+#     dist_to_center = atan(length/f)
+#     dist_to_center_after.append(dist_to_center)
+
+# for i in range(len(dist_to_center_after)):
+#     first = degrees(dist_to_center_real[i])
+#     second = degrees(dist_to_center_after[i])
+#     error = round(abs(first-second),3)
+#     print(f"Error: {error}")
+
 
 error_calculation = {
     'Star ID'   :[],
@@ -139,4 +171,4 @@ error = pd.DataFrame(
 
 print(error)
 
-error.to_excel('Validation Error Degrees.xlsx')
+# error.to_excel('Validation Error Degrees.xlsx')
