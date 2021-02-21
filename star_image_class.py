@@ -33,6 +33,23 @@ class StarImage:
         M = np.array([[a1,a2,a3],[b1,b2,b3],[c1,c2,c3]])
 
         return M
+    
+    def dir_vector_to_star_sensor(ra,de,M_transpose):
+        """[Converts direction vector to star sensor coordinates]
+
+        Args:
+            ra ([int]): [right ascension of the object vector]
+            de ([int]): [desclination of the object vector]
+            M_transpose ([numpy array]): [rotation matrix from direction vector to star sensor transposed]
+        """
+        ra = self.ra
+        de = self.de
+        roll = self.roll    
+        x_dir_vector = (cos(ra)*cos(de))
+        y_dir_vector = (sin(ra)*cos(de))
+        z_dir_vector = (sin(de))
+        dir_vector_matrix = np.array([[x_dir_vector],[y_dir_vector],[z_dir_vector]])
+        return M_transpose.dot(dir_vector_matrix)
 
 image = StarImage(0,0,0)
 M = image.create_M_matrix()
