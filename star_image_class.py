@@ -3,6 +3,12 @@ import numpy as np
 
 class StarImage():
 
+    #Default settings
+    l = 3280
+    w = 2464
+    f = 0.00304
+    myu = 1.12*(10**-6)
+    star_catalogue_path = 'filtered_catalogue/Below_6.0_SAO.csv'
 
     def __init__(self,ra,de,roll):
         self.ra = ra
@@ -76,7 +82,79 @@ class StarImage():
         noised_img = cv2.addWeighted(noise,0.1,background,0.9,0)
         return noised_img
 
-    
+    def create_star_image(self):
+        ra = radians(float(self.ra))
+        de = radians(float(self.de))
+        roll = radians(float(self.roll))
+        FOVy = degrees(2*atan((self.myu*self.w/2)/self.f))
+        FOVx = degrees(2*atan((self.myu*self.l/2)/self.f))
+
+        M = create_M_matrix(ra,de,roll)
+        M_transpose = np.round(np.matrix.transpose(M),decimals=5)
+
+        col_list = ["Star ID","RA","DE","Magnitude"]
+        star_catalogue = pd.read_csv(self.star_catalogue_path,usecols=col_list)
+        R = (sqrt((radians(FOVx)**2)+(radians(FOVy)**2))/2)
+        alpha_start = (ra - (R/cos(de)))
+        alpha_end = (ra + (R/cos(de)))
+        delta_start = (de - R)
+        delta_end = (de + R)
+        star_within_ra_range = (alpha_start <= star_catalogue['RA']) & (star_catalogue['RA'] <= alpha_end)
+        star_within_de_range = (delta_start <= star_catalogue['DE']) & (star_catalogue['DE'] <= delta_end)
+        star_in_ra = star_catalogue[star_within_ra_range]
+        star_in_de = star_catalogue[star_within_de_range]
+        star_in_de = star_in_de[['Star ID']].copy()
+        stars_within_FOV = pd.merge(star_in_ra,star_in_de,on="Star ID")
+
+        #Converting to star sensor coordinate system
+        ra_i = list(stars_within_FOV['RA'])
+        de_i = list(stars_within_FOV['DE'])
+        star_sensor_coordinates = []
+        for i in range(len(ra_i)):
+            coordinates = dir_vector_to_star_sensor(ra_i[i],de_i[i],M_transpose=M_transpose)
+            star_sensor_coordinates.append(coordinates)
+
+        #Conversion of star sensor coordinate system to image coordinate system
+        star_loc = []
+        for coord in star_sensor_coordinates:
+            x = f*(coord[0]/coord[2])
+            y = f*(coord[1]/coord[2])
+            star_loc.append((x,y))
+
+        xtot = 2*tan(radians(FOVx)/2)*f
+        ytot = 2*tan(radians(FOVy)/2)*f
+        xpixel = l/xtot
+        ypixel = w/ytot
+
+        magnitude_mv = list(stars_within_FOV['Magnitude'])
+        filtered_magnitude = []
+
+        #Rescaling to pixel sizes
+        pixel_coordinates = []
+        delete_indices = []
+        for i,(x1,y1) in enumerate(star_loc):
+            x1 = float(x1)
+            y1 = float(y1)
+            x1pixel = round(xpixel*x1)
+            y1pixel = round(ypixel*y1)
+            if abs(x1pixel) > l/2 or abs(y1pixel) > w/2:
+                delete_indices.append(i)
+                continue
+            pixel_coordinates.append((x1pixel,y1pixel))
+            filtered_magnitude.append(magnitude_mv[i])
+
+        background = np.zeros((w,l))
+
+        for i in range(len(filtered_magnitude)):
+            x = round(l/2 + pixel_coordinates[i][0])
+            y = round(w/2 - pixel_coordinates[i][1])
+            background = draw_star(x,y,filtered_magnitude[i],False,background)
+
+        #Adding noise
+        background = add_noise(0,50,background=background)
+
+        return background
+
 
 image = StarImage(0,0,0)
 M = image.create_M_matrix()
