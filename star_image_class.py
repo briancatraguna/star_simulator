@@ -2,10 +2,11 @@ from math import sin,cos,tan,radians,degrees,atan,sqrt
 import numpy as np
 import pandas as pd
 import cv2
+import matplotlib.pyplot as plt
 
 class StarImage():
 
-    #Default settings
+    #Default settings properties
     l = 3280
     w = 2464
     f = 0.00304
@@ -157,6 +158,7 @@ class StarImage():
 
         return background
 
+
     def config_settings(self,l,w,f,myu,star_catalogue_path):
         """[Configure the sensor settings]
 
@@ -174,5 +176,19 @@ class StarImage():
         self.star_catalogue_path = star_catalogue_path
 
 
+    def displayImg(self,cmap='gray'):
+        """[Displays image]
+
+        Args:
+            img ([numpy array]): [the pixel values in the form of numpy array]
+            cmap ([string], optional): [can be 'gray']. Defaults to None.
+        """
+        img = self.create_star_image()
+        fig = plt.figure(figsize=(12,10))
+        ax = fig.add_subplot(111)
+        ax.imshow(img,cmap)
+        plt.show()
+
+
 image = StarImage(0,0,0)
-image = image.create_star_image()
+image.displayImg()
