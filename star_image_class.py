@@ -1,14 +1,15 @@
 from math import sin,cos
 import numpy as np
 
-class StarImage:
-    #Constructor
+class StarImage():
+
+
     def __init__(self,ra,de,roll):
         self.ra = ra
         self.de = de
         self.roll = roll
 
-    #Create M matrix method
+
     def create_M_matrix(self):
         """[summary]
 
@@ -31,10 +32,11 @@ class StarImage:
         c2 = (cos(ra)*cos(roll))
         c3 = -(sin(de))
         M = np.array([[a1,a2,a3],[b1,b2,b3],[c1,c2,c3]])
-
         return M
     
-    def dir_vector_to_star_sensor(ra,de,M_transpose):
+
+
+    def dir_vector_to_star_sensor(self,ra,de,M_transpose):
         """[Converts direction vector to star sensor coordinates]
 
         Args:
@@ -50,6 +52,31 @@ class StarImage:
         z_dir_vector = (sin(de))
         dir_vector_matrix = np.array([[x_dir_vector],[y_dir_vector],[z_dir_vector]])
         return M_transpose.dot(dir_vector_matrix)
+
+
+    def draw_star(self,x,y,magnitude,gaussian,background,ROI=5):
+        mag = abs(magnitude-7)
+        radius = int(round((mag/9)*(5)+3))
+        color = int(round((mag/0)*(155)+100))
+        cv2.circle(background,(x,y),radius,color,thickness=-1)
+        return background
+
+
+    def add_noise(self,low,high,background):
+        """[Adds noise to an image]
+
+        Args:
+            low ([int]): [lower threshold of the noise generated]
+            high ([int]): [maximum pixel value of the noise generated]
+            background ([numpy array]): [the image that is put noise on]
+        """
+        row,col = np.shape(background)
+        background = background.astype(int)
+        noise = np.random.randint(low,high=high,size=(row,col))
+        noised_img = cv2.addWeighted(noise,0.1,background,0.9,0)
+        return noised_img
+
+    
 
 image = StarImage(0,0,0)
 M = image.create_M_matrix()
