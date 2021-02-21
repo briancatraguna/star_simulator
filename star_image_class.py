@@ -51,10 +51,7 @@ class StarImage():
             ra ([int]): [right ascension of the object vector]
             de ([int]): [desclination of the object vector]
             M_transpose ([numpy array]): [rotation matrix from direction vector to star sensor transposed]
-        """
-        ra = self.ra
-        de = self.de
-        roll = self.roll    
+        """ 
         x_dir_vector = (cos(ra)*cos(de))
         y_dir_vector = (sin(ra)*cos(de))
         z_dir_vector = (sin(de))
@@ -91,7 +88,7 @@ class StarImage():
         roll = radians(float(self.roll))
         FOVy = degrees(2*atan((self.myu*self.w/2)/self.f))
         FOVx = degrees(2*atan((self.myu*self.l/2)/self.f))
-
+        print(FOVx,FOVy)
         M = self.create_M_matrix()
         M_transpose = np.round(np.matrix.transpose(M),decimals=5)
 
@@ -188,7 +185,3 @@ class StarImage():
         ax = fig.add_subplot(111)
         ax.imshow(img,cmap)
         plt.show()
-
-
-image = StarImage(0,0,0)
-image.displayImg()

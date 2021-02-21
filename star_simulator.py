@@ -42,7 +42,8 @@ def dir_vector_to_star_sensor(ra,de,M_transpose):
         ra ([int]): [right ascension of the object vector]
         de ([int]): [desclination of the object vector]
         M_transpose ([numpy array]): [rotation matrix from direction vector to star sensor transposed]
-    """    
+    """
+    print(ra,de,roll)    
     x_dir_vector = (cos(ra)*cos(de))
     y_dir_vector = (sin(ra)*cos(de))
     z_dir_vector = (sin(de))
@@ -143,6 +144,7 @@ print(f"Matrix M:\n {M}")
 #Check if matrix is orthogonal
 M_inverse = np.round(np.linalg.inv(M),decimals=5)
 M_transpose = np.round(np.matrix.transpose(M),decimals=5)
+print(f"Transpose: {M_transpose}")
 orthogonal_check = []
 for row in range(3):
     for column in range(3):
@@ -163,34 +165,27 @@ alpha_start = (ra - (R/cos(de)))
 alpha_end = (ra + (R/cos(de)))
 delta_start = (de - R)
 delta_end = (de + R)
-print("RA range: {0} to {1}".format(alpha_start,alpha_end))
-print("DE range: {0} to {1}".format(delta_start,delta_end))
 star_within_ra_range = (alpha_start <= star_catalogue['RA']) & (star_catalogue['RA'] <= alpha_end)
 star_within_de_range = (delta_start <= star_catalogue['DE']) & (star_catalogue['DE'] <= delta_end)
 star_in_ra = star_catalogue[star_within_ra_range]
 star_in_de = star_catalogue[star_within_de_range]
 star_in_de = star_in_de[['Star ID']].copy()
 stars_within_FOV = pd.merge(star_in_ra,star_in_de,on="Star ID")
-print(stars_within_FOV)
 
 #Converting to star sensor coordinate system
 ra_i = list(stars_within_FOV['RA'])
 de_i = list(stars_within_FOV['DE'])
 star_sensor_coordinates = []
-print("Star sensor coordinates:\n")
 for i in range(len(ra_i)):
     coordinates = dir_vector_to_star_sensor(ra_i[i],de_i[i],M_transpose=M_transpose)
     star_sensor_coordinates.append(coordinates)
-    print(coordinates)
 
 #STEP 2: CONVERSION OF STAR SENSOR COORDINATE SYSTEM TO IMAGE COORDINATE SYSTEM
 star_loc = []
-print("Image coordinates:\n")
 for coord in star_sensor_coordinates:
     x = f*(coord[0]/coord[2])
     y = f*(coord[1]/coord[2])
     star_loc.append((x,y))
-    print("X: {}\tY: {}".format(x,y))
 
 pixel_per_length = 1/myu
 
@@ -199,8 +194,6 @@ filtered_magnitude = []
 
 #Rescaling to pixel sizes
 pixel_coordinates = []
-print("*"*100)
-print("Pixel coordinates:\n")
 delete_indices = []
 for i,(x1,y1) in enumerate(star_loc):
     x1 = float(x1)
@@ -212,18 +205,11 @@ for i,(x1,y1) in enumerate(star_loc):
         continue
     pixel_coordinates.append((x1pixel,y1pixel))
     filtered_magnitude.append(magnitude_mv[i])
-    print("X: {}\tY: {}".format(x1pixel,y1pixel))
 
 background = np.zeros((w,l))
-print("*"*60)
-print("New pixel coordinates: ")
 for i in range(len(filtered_magnitude)):
     x = round(l/2 + pixel_coordinates[i][0])
     y = round(w/2 - pixel_coordinates[i][1])
-    print(f"Drawing star {i+1} of {len(filtered_magnitude)}...")
-    print(f"X: {x}\tY: {y}")
-    print(f"Magnitude: {filtered_magnitude[i]}")
-    print("*"*40)
     background = draw_star(x,y,filtered_magnitude[i],False,background)
 
 #Adding noise
@@ -233,4 +219,4 @@ displayImg(background,cmap='gray')
 
 file_name = f"ra{ra0}_de{de0}_roll{roll0}.jpg"
 # cv2.imwrite("sample_images/"+file_name,background)
-cv2.imwrite(file_name,background)
+# cv2.imwrite(file_name,background)
