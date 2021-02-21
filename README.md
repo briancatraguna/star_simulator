@@ -16,7 +16,9 @@ In this repository, the main file that generates the star image is ```star_simul
 <br>This is the script used to minimize the hassle of creating the full code for generating a star image when trying to create each frame for the star tracking video.
 4. ```star_sim_with_angular_rate.py```.
 <br>Generates the star tracking video and the video will be automatically saved under the directory ```sample_tracking_videos/``` with ```.avi``` extension.
-5. ```gui_root.py```
+5. ```star_image_class.py```
+<br>This image is the class file which can be reused for any development in the future.
+6. ```gui_root.py```
 <br>Run this to get a more user friendly interface. This is the graphical user interface based star simulator.
 
 ## Dependencies
