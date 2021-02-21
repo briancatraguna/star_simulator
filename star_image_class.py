@@ -1,5 +1,6 @@
-from math import sin,cos
+from math import sin,cos,tan,radians,degrees,atan,sqrt
 import numpy as np
+import pandas as pd
 
 class StarImage():
 
@@ -89,7 +90,7 @@ class StarImage():
         FOVy = degrees(2*atan((self.myu*self.w/2)/self.f))
         FOVx = degrees(2*atan((self.myu*self.l/2)/self.f))
 
-        M = create_M_matrix(ra,de,roll)
+        M = self.create_M_matrix()
         M_transpose = np.round(np.matrix.transpose(M),decimals=5)
 
         col_list = ["Star ID","RA","DE","Magnitude"]
@@ -111,20 +112,20 @@ class StarImage():
         de_i = list(stars_within_FOV['DE'])
         star_sensor_coordinates = []
         for i in range(len(ra_i)):
-            coordinates = dir_vector_to_star_sensor(ra_i[i],de_i[i],M_transpose=M_transpose)
+            coordinates = self.dir_vector_to_star_sensor(ra_i[i],de_i[i],M_transpose=M_transpose)
             star_sensor_coordinates.append(coordinates)
 
         #Conversion of star sensor coordinate system to image coordinate system
         star_loc = []
         for coord in star_sensor_coordinates:
-            x = f*(coord[0]/coord[2])
-            y = f*(coord[1]/coord[2])
+            x = self.f*(coord[0]/coord[2])
+            y = self.f*(coord[1]/coord[2])
             star_loc.append((x,y))
 
-        xtot = 2*tan(radians(FOVx)/2)*f
-        ytot = 2*tan(radians(FOVy)/2)*f
-        xpixel = l/xtot
-        ypixel = w/ytot
+        xtot = 2*tan(radians(FOVx)/2)*self.f
+        ytot = 2*tan(radians(FOVy)/2)*self.f
+        xpixel = self.l/xtot
+        ypixel = self.w/ytot
 
         magnitude_mv = list(stars_within_FOV['Magnitude'])
         filtered_magnitude = []
@@ -137,18 +138,18 @@ class StarImage():
             y1 = float(y1)
             x1pixel = round(xpixel*x1)
             y1pixel = round(ypixel*y1)
-            if abs(x1pixel) > l/2 or abs(y1pixel) > w/2:
+            if abs(x1pixel) > self.l/2 or abs(y1pixel) > self.w/2:
                 delete_indices.append(i)
                 continue
             pixel_coordinates.append((x1pixel,y1pixel))
             filtered_magnitude.append(magnitude_mv[i])
 
-        background = np.zeros((w,l))
+        background = np.zeros((self.w,self.l))
 
         for i in range(len(filtered_magnitude)):
-            x = round(l/2 + pixel_coordinates[i][0])
-            y = round(w/2 - pixel_coordinates[i][1])
-            background = draw_star(x,y,filtered_magnitude[i],False,background)
+            x = round(self.l/2 + pixel_coordinates[i][0])
+            y = round(self.w/2 - pixel_coordinates[i][1])
+            background = self.draw_star(x,y,filtered_magnitude[i],False,background)
 
         #Adding noise
         background = add_noise(0,50,background=background)
@@ -157,5 +158,4 @@ class StarImage():
 
 
 image = StarImage(0,0,0)
-M = image.create_M_matrix()
-print(M)
+image = image.create_star_image()
