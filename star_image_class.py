@@ -1,6 +1,7 @@
 from math import sin,cos,tan,radians,degrees,atan,sqrt
 import numpy as np
 import pandas as pd
+import cv2
 
 class StarImage():
 
@@ -42,7 +43,6 @@ class StarImage():
         return M
     
 
-
     def dir_vector_to_star_sensor(self,ra,de,M_transpose):
         """[Converts direction vector to star sensor coordinates]
 
@@ -64,7 +64,7 @@ class StarImage():
     def draw_star(self,x,y,magnitude,gaussian,background,ROI=5):
         mag = abs(magnitude-7)
         radius = int(round((mag/9)*(5)+3))
-        color = int(round((mag/0)*(155)+100))
+        color = int(round((mag/9)*(155)+100))
         cv2.circle(background,(x,y),radius,color,thickness=-1)
         return background
 
@@ -82,6 +82,7 @@ class StarImage():
         noise = np.random.randint(low,high=high,size=(row,col))
         noised_img = cv2.addWeighted(noise,0.1,background,0.9,0)
         return noised_img
+
 
     def create_star_image(self):
         ra = radians(float(self.ra))
@@ -152,9 +153,25 @@ class StarImage():
             background = self.draw_star(x,y,filtered_magnitude[i],False,background)
 
         #Adding noise
-        background = add_noise(0,50,background=background)
+        background = self.add_noise(0,50,background=background)
 
         return background
+
+    def config_settings(self,l,w,f,myu,star_catalogue_path):
+        """[Configure the sensor settings]
+
+        Args:
+            l ([int]): [pixel length]
+            w ([int]): [pixel width]
+            f ([float]): [focal length in meters]
+            myu ([float]): [length/pixel]
+            star_catalogue_path ([str]): [the path in which the star catalogue is in]
+        """
+        self.l = l
+        self.w = w
+        self.f = f
+        self.myu = myu
+        self.star_catalogue_path = star_catalogue_path
 
 
 image = StarImage(0,0,0)
