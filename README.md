@@ -44,4 +44,13 @@ pip install cv2-python
 pip install tkinter
 ```
 
-That's it, and enjoy! Any feedbacks would be very much appreciated!
+## App Screenshot!
+
+Run `gui_root.py` you will get this result!
+
+<img src="https://user-images.githubusercontent.com/32363208/124360155-78613e80-dc52-11eb-8900-1ae988bedbf2.png" height=600/>
+
+### Features:
+- Change the attitude of the field of view
+- Change the focal length of the camera
+- Change the pixel size of the camera
