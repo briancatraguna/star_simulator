@@ -51,6 +51,14 @@ Run `gui_root.py` you will get this result!
 <img src="https://user-images.githubusercontent.com/32363208/124360155-78613e80-dc52-11eb-8900-1ae988bedbf2.png" height=600/>
 
 ### Features:
-- Change the attitude of the field of view
+- Change the attitude of the field of view (in Celestial Coordinates)
 - Change the focal length of the camera
 - Change the pixel size of the camera
+
+### More
+
+Celestial coordinates can be visualised in this picture below:
+
+<img src="https://user-images.githubusercontent.com/32363208/124360625-02aaa200-dc55-11eb-8c31-0117c47144d4.jpg" width=300/>
+
+Source: [skyeandtelescope.org](https://skyandtelescope.org/astronomy-resources/right-ascension-declination-celestial-coordinates/)
